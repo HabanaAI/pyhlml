@@ -1,30 +1,30 @@
 import unittest
 
-from pyhlml.hlml_lib import LibHLML
+from pyhlml.libhlml import LibHLML
 
 class TestLibHLML(unittest.TestCase):
     def setUp(self):
-        self.lib = LoadHLML()
+        self.lib = LibHLML()
 
     def test_inc_ref(self):
-        val = pyhlml._hlmlOBJ.ref_count
-        pyhlml._hlmlOBJ.inc_ref()
+        val =self.lib.ref_count
+        self.lib.inc_ref()
         self.assertEqual(
-            pyhlml._hlmlOBJ.ref_count,
+           self.lib.ref_count,
             val + 1
         )
 
     def test_dec_ref(self):
-        pyhlml._hlmlOBJ.ref_count = 0
-        pyhlml._hlmlOBJ.dec_ref()
-        self.assertEqual(
-            pyhlml._hlmlOBJ.ref_count,
+       self.lib.ref_count = 0
+       self.lib.dec_ref()
+       self.assertEqual(
+           self.lib.ref_count,
             0
         )
-        pyhlml._hlmlOBJ.ref_count = 1
-        pyhlml._hlmlOBJ.dec_ref()
-        self.assertEqual(
-            pyhlml._hlmlOBJ.ref_count,
+       self.lib.ref_count = 1
+       self.lib.dec_ref()
+       self.assertEqual(
+           self.lib.ref_count,
             0
         )
 

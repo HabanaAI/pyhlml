@@ -17,10 +17,6 @@ class HLML_DEFINE:
     HLML_CLOCKS_THROTTLE_REASON_POWER       = ( 1 << 0 )
     HLML_CLOCKS_THROTTLE_REASON_THERMAL     = ( 1 << 1 )
 
-"""
-STRUCTS
-"""
-
 class _PrintS(ctypes.Structure):
     """
     Produces nicer __str__ output than ctypes.Structure.
