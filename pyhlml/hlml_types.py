@@ -3,6 +3,10 @@ Python bindings for HLML types
 """
 
 import ctypes
+from typing import TYPE_CHECKING
+
+class HLML_DEVICE:
+    TYPE                                    = ctypes.c_void_p()
 
 class HLML_DEFINE:
     PCI_DOMAIN_LEN                          = 5
@@ -16,6 +20,89 @@ class HLML_DEFINE:
     HLML_EVENT_CLOCK_RATE                   = ( 1 << 2 )
     HLML_CLOCKS_THROTTLE_REASON_POWER       = ( 1 << 0 )
     HLML_CLOCKS_THROTTLE_REASON_THERMAL     = ( 1 << 1 )
+
+class HLML_RETURN:
+    TYPE                                    = ctypes.c_uint()
+    HLML_SUCCESS                            = 0
+    HLML_ERROR_UNINITIALIZED                = 1
+    HLML_ERROR_INVALID_ARGUMENT             = 2
+    HLML_ERROR_NOT_SUPPORTED                = 3
+    HLML_ERROR_ALREADY_INITIALIZED          = 5
+    HLML_ERROR_NOT_FOUND                    = 6
+    HLML_ERROR_INSUFFICIENT_SIZE            = 7
+    HLML_ERROR_DRIVER_NOT_LOADED            = 9
+    HLML_ERROR_TIMEOUT                      = 10
+    HLML_ERROR_AIP_IS_LOST                  = 15
+    HLML_ERROR_MEMORY                       = 20
+    HLML_ERROR_NO_DATA                      = 21
+    HLML_ERROR_UNKNOWN                      = 49
+
+class HLML_CLOCK_TYPE:
+    TYPE                                    = ctypes.c_uint()
+    HLML_CLOCK_SOC                          = 0
+    HLML_CLOCK_IC                           = 1
+    HLML_CLOCK_MME                          = 2
+    HLML_CLOCK_TPC                          = 3
+    HLML_CLOCK_COUNT                        = 4
+
+class HLML_TEMP_SENS:
+    TYPE                                    = ctypes.c_uint()
+    HLML_TEMPERATURE_ON_AIP                 = 0
+    HLML_TEMPERATIRE_ON_BOARD               = 1
+
+class HLML_TEMP_THRESH:
+    TYPE                                    = ctypes.c_uint()
+    HLML_TEMPERATURE_THRESHOLD_SHUTDOWN     = 0
+    HLML_TEMPERATURE_THRESHOLD_SLOWDOWN     = 1
+    HLML_TEMPERATURE_THRESHOLD_MEM_MAX      = 2
+    HLML_TEMPERATURE_THRESHOLD_GPU_MAX      = 3
+    HLML_TEMPERATURE_THRESHOLD_COUNT        = 4
+
+class HLML_ENABLE_STATE:
+    TYPE                                    = ctypes.c_uint()
+    HLML_FEATURE_DISABLED                   = 0
+    HLML_FEATURE_ENABLED                    = 1
+
+class HLML_P_STATES:
+    TYPE                                    = ctypes.c_uint()
+    HLML_PSTATE_0                           = 0
+    HLML_PSTATE_UNKNOWN                     = 3
+
+class HLML_MEMORY_ERROR:
+    TYPE                                    = ctypes.c_uint()
+    HLML_MEMORY_ERROR_TYPE_CORRECTED        = 0 # NOT SUPPORTED BY HLML
+    HLML_MEMORY_ERROR_TYPE_UNCORRECTED      = 1
+    HLML_MEMORY_ERROR_TYPE_COUNT            = 2
+
+class HLML_ECC_COUNTER:
+    TYPE                                    = ctypes.c_uint()
+    HLML_VOLATILE_ECC                       = 0
+    HLML_AGGREGATE_ECC                      = 1
+    HLML_ECC_COUNTER_TYPE_COUNT             = 2
+
+class HLML_ERR_INJECT:
+    TYPE                                    = ctypes.c_uint()
+    HLML_ERR_INJECT_ENDLESS_COMMAND         = 0
+    HLML_ERR_INJECT_NON_FATAL_EVENT         = 1
+    HLML_ERR_INJECT_FATAL_EVENT             = 2
+    HLML_ERR_INJECT_LOSS_OF_HEARTBEAT       = 3
+    HLML_ERR_INJECT_THERMAL_EVENT           = 4
+    HLML_ERR_INJECT_COUNT                   = 5
+
+class HLML_PCIE_UTIL_COUNTER:
+    TYPE                                    = ctypes.c_uint()
+    HLML_PCIE_UTIL_TX_BYTES                 = 0
+    HLML_PCIE_UTIL_RX_BYTES                 = 1
+    HLML_PCIE_UTIL_COUNT                    = 2
+    
+class HLML_EVENT_SET:
+    TYPE                                    = ctypes.c_void_p()
+
+class _struct_c_hlml_unit(ctypes.Structure):
+    pass # opaque handle
+
+class HLML_UNIT:
+    TYPE                                    = _struct_c_hlml_unit()
 
 class _PrintS(ctypes.Structure):
     """

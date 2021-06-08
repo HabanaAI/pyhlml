@@ -2,9 +2,14 @@ import unittest
 
 import pyhlml
 
+_hlmlOBJ = pyhlml.libhlml.LibHLML()
+
 class TestPyHLML(unittest.TestCase):
+
     def setUp(self):
-        pyhlml.hlmlInitWithFlags(0)
+        global _hlmlOBJ
+        if _hlmlOBJ.ref_count == 0:        
+            pyhlml.hlmlInitWithFlags(0)
 
     def tearDown(self):
         pyhlml.hlmlShutdown()
@@ -13,19 +18,18 @@ class TestPyHLML(unittest.TestCase):
         pass
 
     def test_get_device_count(self):
-        exp = 4 # Assume HLS1-H
         count = pyhlml.hlmlDeviceGetCount()
-        self.assertEqual(count, exp)
+        self.assertEqual(count, 4) # Assume HLS1-H
 
     def test_get_handle_by_pci_bus_id(self):
         pci_addr = "000:60:00.0"
         handle = pyhlml.hlmlDeviceGetHandleByPCIBusID(pci_addr)
-        print(f"Handle: {handle}")
+        self.assertNotEqual(handle, None)
 
     def test_get_handle_by_index(self):
         index = 2
         handle = pyhlml.hlmlDeviceGetHandleByIndex(index)
-        print(f"Handle: {handle}")
+        self.assertNotEqual(handle, None)
 
     def test_get_handle_by_uuid(self):
         pass
@@ -46,13 +50,21 @@ class TestPyHLML(unittest.TestCase):
         pass
 
     def test_device_get_utilization_rates(self):
-        pass
+        device = pyhlml.hlmlDeviceGetHandleByIndex(0)
+        util_rates = pyhlml.hlmlDeviceGetUtilizationRates(device)
+        print(f"\nMEM INFO: {util_rates}")
 
     def test_device_get_memory_info(self):
-        pass
+        device = pyhlml.hlmlDeviceGetHandleByIndex(0)
+        mem_info = pyhlml.hlmlDeviceGetMemoryInfo(device)
+        print(f"\nMEM INFO: {mem_info}")
 
     def test_device_get_temperature(self):
-        pass
+        device = pyhlml.hlmlDeviceGetHandleByIndex(0)
+        a_temp = pyhlml.hlmlDeviceGetTemperature(device, 0)
+        b_temp = pyhlml.hlmlDeviceGetTemperature(device, 1)
+        print(f"\nAIP TEMP: {a_temp}")
+        print(f"BOARD TEMP: {b_temp}")
 
     def test_device_get_temperature_threshold(self):
         pass
