@@ -1,59 +1,25 @@
 import string
+import sys
 
-class return_types:
-    HLML_SUCCESS                            = 0
-    HLML_ERROR_UNINITIALIZED                = 1
-    HLML_ERROR_INVALID_ARGUMENT             = 2
-    HLML_ERROR_NOT_SUPPORTED                = 3
-    HLML_ERROR_ALREADY_INITIALIZED          = 5
-    HLML_ERROR_NOT_FOUND                    = 6
-    HLML_ERROR_INSUFFICIENT_SIZE            = 7
-    HLML_ERROR_DRIVER_NOT_LOADED            = 9
-    HLML_ERROR_TIMEOUT                      = 10
-    HLML_ERROR_AIP_IS_LOST                  = 15
-    HLML_ERROR_MEMORY                       = 20
-    HLML_ERROR_NO_DATA                      = 21
-    HLML_ERROR_UNKNOWN                      = 49
-
-def extract_HLML_errors_as_classes():
-        '''
-        Generates a hierarchy of classes on top of HLMLError class.
-        Each HLML Error gets a new HLMLError subclass. This way try,except blocks can filter appropriate
-        exceptions more easily.
-        HLMLError is a parent class. Each HLML_ERROR_* gets it's own subclass.
-        e.g. HLML_ERROR_ALREADY_INITIALIZED will be turned into HLMLError_AlreadyInitialized
-        '''
-        hlmlErrorsNames = [x for x in dir(return_types) if x.startswith("HLML_ERROR_")]
-        for err_name in hlmlErrorsNames:
-            # e.g. Turn HLML_ERROR_ALREADY_INITIALIZED into HLMLError_AlreadyInitialized
-            class_name = "HLMLError_" + string.capwords(err_name.replace("HLML_ERROR_", ""), "_").replace("_", "")
-            err_val = getattr(return_types, err_name)
-            def gen_new(val):
-                def new(typ):
-                    obj = HLMLError.__new__(typ, val)
-                    return obj
-                return new
-            new_error_class = type(class_name, (HLMLError,), {'__new__': gen_new(err_val)})
-            new_error_class.__module__ = __name__
-            setattr(return_types, class_name, new_error_class)
-        return new_error_class
+import pyhlml.hlml_types as hlml_t
 
 class HLMLError(Exception):
+    
     _classMap = extract_HLML_errors_as_classes()
     _errcodes = {
-        return_types.HLML_SUCCESS                    : "No error",
-        return_types.HLML_ERROR_UNINITIALIZED        : "Libhlml not initialized",
-        return_types.HLML_ERROR_INVALID_ARGUMENT     : "Invalid argument",
-        return_types.HLML_ERROR_NOT_SUPPORTED        : "Not supported",
-        return_types.HLML_ERROR_ALREADY_INITIALIZED  : "Libhlml already initialized",
-        return_types.HLML_ERROR_NOT_FOUND            : "Not found",
-        return_types.HLML_ERROR_INSUFFICIENT_SIZE    : "Insufficient size",
-        return_types.HLML_ERROR_DRIVER_NOT_LOADED    : "Driver not loaded",
-        return_types.HLML_ERROR_TIMEOUT              : "Timeout",
-        return_types.HLML_ERROR_AIP_IS_LOST          : "AIP Lost",
-        return_types.HLML_ERROR_MEMORY               : "Memory error",
-        return_types.HLML_ERROR_NO_DATA              : "No Data",
-        return_types.HLML_ERROR_UNKNOWN              : "Unknown"
+        hlml_t.HLML_RETURN.HLML_SUCCESS                    : "No error",
+        hlml_t.HLML_RETURN.HLML_ERROR_UNINITIALIZED        : "Libhlml not initialized",
+        hlml_t.HLML_RETURN.HLML_ERROR_INVALID_ARGUMENT     : "Invalid argument",
+        hlml_t.HLML_RETURN.HLML_ERROR_NOT_SUPPORTED        : "Not supported",
+        hlml_t.HLML_RETURN.HLML_ERROR_ALREADY_INITIALIZED  : "Libhlml already initialized",
+        hlml_t.HLML_RETURN.HLML_ERROR_NOT_FOUND            : "Not found",
+        hlml_t.HLML_RETURN.HLML_ERROR_INSUFFICIENT_SIZE    : "Insufficient size",
+        hlml_t.HLML_RETURN.HLML_ERROR_DRIVER_NOT_LOADED    : "Driver not loaded",
+        hlml_t.HLML_RETURN.HLML_ERROR_TIMEOUT              : "Timeout",
+        hlml_t.HLML_RETURN.HLML_ERROR_AIP_IS_LOST          : "AIP Lost",
+        hlml_t.HLML_RETURN.HLML_ERROR_MEMORY               : "Memory error",
+        hlml_t.HLML_RETURN.HLML_ERROR_NO_DATA              : "No Data",
+        hlml_t.HLML_RETURN.HLML_ERROR_UNKNOWN              : "Unknown"
     }
 
     def __new__(typ, value):
@@ -76,3 +42,27 @@ def HLML_exception(ec):
     if ec not in HLMLError._classMap:
         raise ValueError(f'hlml error code {ec} is not valid')
     return HLMLError._classMap[ec]
+
+
+def extract_HLML_errors_as_classes():
+        '''
+        Generates a hierarchy of classes on top of HLMLError class.
+        Each HLML Error gets a new HLMLError subclass. This way try,except blocks can filter appropriate
+        exceptions more easily.
+        HLMLError is a parent class. Each HLML_ERROR_* gets it's own subclass.
+        e.g. HLML_ERROR_ALREADY_INITIALIZED will be turned into HLMLError_AlreadyInitialized
+        '''
+        hlmlErrorsNames = [x for x in dir(hlml_t.HLML_RETURN) if x.startswith("HLML_ERROR_")]
+        for err_name in hlmlErrorsNames:
+            # e.g. Turn HLML_ERROR_ALREADY_INITIALIZED into HLMLError_AlreadyInitialized
+            class_name = "HLMLError_" + string.capwords(err_name.replace("HLML_ERROR_", ""), "_").replace("_", "")
+            err_val = getattr(hlml_t.HLML_RETURN, err_name)
+            def gen_new(val):
+                def new(typ):
+                    obj = HLMLError.__new__(typ, val)
+                    return obj
+                return new
+            new_error_class = type(class_name, (HLMLError,), {'__new__': gen_new(err_val)})
+            new_error_class.__module__ = __name__
+            setattr(HLMLError, class_name, new_error_class)
+        return new_error_class

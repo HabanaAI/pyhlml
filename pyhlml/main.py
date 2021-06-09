@@ -1,14 +1,15 @@
 import ctypes
 
-from pyhlml.libhlml import LibHLML
 import pyhlml.hlml_types as hlml_t
+
+from pyhlml.libhlml import LibHLML
+from pyhlml.hlml_error import HLMLError
 
 _hlmlOBJ = LibHLML()
 
 def check_return(ret):
         if (ret != hlml_t.HLML_RETURN.HLML_SUCCESS ):
-            print("\nSUM TING WONG")
-            print(ret)
+            raise HLMLError(ret)
         return ret
 
 def hlmlInit() -> None:
@@ -94,7 +95,7 @@ def hlmlDeviceGetHandleByUUID(uuid: str) -> hlml_t.HLML_DEVICE.TYPE:
     global _hlmlOBJ
     device = hlml_t.HLML_DEVICE.TYPE
 
-    fn = _hlmlOBJ.get_func_ptr("hlml_device_get_handle_by_uuid")
+    fn = _hlmlOBJ.get_func_ptr("hlml_device_get_handle_by_UUID")
     ret = fn(uuid, ctypes.byref(device))
 
     check_return(ret)
@@ -112,12 +113,12 @@ def hlmlDeviceGetName(device: hlml_t.HLML_DEVICE.TYPE) -> str:
     )
 
     check_return(ret)
-    return name
+    return name.value
 
 def hlmlDeviceGetPCIInfo(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.c_hlml_pci_info:
     """ Get the PCI attributes of input device """
     global _hlmlOBJ
-    pci_info = hlml_t.c_hlml_pcb_info()
+    pci_info = hlml_t.c_hlml_pci_info()
     
     fn = _hlmlOBJ.get_func_ptr("hlml_device_get_pci_info")
     ret = fn(
@@ -163,8 +164,7 @@ def hlmlDeviceGetUtilizationRates(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     ret = fn(device, ctypes.byref(hlml_util))
 
     check_return(ret)
-    return hlml_util
-
+    return hlml_util.a
 
 def hlmlDeviceGetMemoryInfo(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.c_hlml_memory:
     """ Returns the total, used, and free memory in bytes"""
@@ -176,7 +176,7 @@ def hlmlDeviceGetMemoryInfo(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.c_hlml_me
 
     check_return(ret)
     return hlml_mem
-    
+
 def hlmlDeviceGetTemperature(
         device: hlml_t.HLML_DEVICE.TYPE, sensor_type: hlml_t.HLML_TEMP_SENS.TYPE
     ) -> int:
@@ -401,7 +401,6 @@ def hlmlDeviceGetBoardID(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     check_return(ret)
     return brd.value
     
-
 def hlmlDeviceGetPCIEThroughput(device: hlml_t.HLML_DEVICE.TYPE, counter_type: int) -> int:
     """ Retrieve PCIe utilization information ( over 10ms interval ) 
         counter_type ( 0-TX / 1-RX )
