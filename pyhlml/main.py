@@ -129,7 +129,7 @@ def hlmlDeviceGetPCIInfo(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.c_hlml_pci_i
     check_return(ret)
     return pci_info
 
-def hlmlDeviceGetClockInfo(device: hlml_t.HLML_DEVICE.TYPE, clock_type: int) -> int:
+def hlmlDeviceGetClockInfo(device: hlml_t.HLML_DEVICE.TYPE, clock_type=0 ) -> int:
     """ Retrives the current speed of the selected clock (MHz)
         clock_type ( 0-SOC ( GAUDI ) / 1-IC ( GOYA ) / 2-MME ( GOYA ) / 3-TPC ( GOYA ) )
     """
@@ -142,7 +142,7 @@ def hlmlDeviceGetClockInfo(device: hlml_t.HLML_DEVICE.TYPE, clock_type: int) -> 
     check_return(ret)
     return speed.value
 
-def hlmlDeviceGetMaxClockInfo(device: hlml_t.HLML_DEVICE.TYPE, clock_type: int) -> int:
+def hlmlDeviceGetMaxClockInfo(device: hlml_t.HLML_DEVICE.TYPE, clock_type=0 ) -> int:
     """ Retrives the maximum speed of the selected clock (MHz)
         clock_type ( 0-SOC ( GAUDI ) / 1-IC ( GOYA ) / 2-MME ( GOYA ) / 3-TPC ( GOYA ) )
     """
@@ -164,7 +164,7 @@ def hlmlDeviceGetUtilizationRates(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     ret = fn(device, ctypes.byref(hlml_util))
 
     check_return(ret)
-    return hlml_util
+    return hlml_util.aip
 
 def hlmlDeviceGetMemoryInfo(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.c_hlml_memory:
     """ Returns the total, used, and free memory in bytes"""
@@ -214,7 +214,7 @@ def hlmlDeviceGetPowerUsage(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     ret = fn(device, ctypes.byref(power))
 
     check_return(ret)
-    return power
+    return power.value
 
 def hlmlDeviceGetPowerManagementDefaultLimit(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     """ Retrieves default power management limit on this device in mW """
