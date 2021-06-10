@@ -5,7 +5,6 @@ import pyhlml.hlml_types as hlml_t
 
 class HLMLError(Exception):
     
-    _classMap = extract_HLML_errors_as_classes()
     _errcodes = {
         hlml_t.HLML_RETURN.HLML_SUCCESS                    : "No error",
         hlml_t.HLML_RETURN.HLML_ERROR_UNINITIALIZED        : "Libhlml not initialized",

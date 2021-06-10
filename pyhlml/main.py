@@ -2,14 +2,14 @@ import ctypes
 
 import pyhlml.hlml_types as hlml_t
 
-from pyhlml.libhlml import LibHLML
+from pyhlml.hlml_lib import LibHLML
 from pyhlml.hlml_error import HLMLError
 
 _hlmlOBJ = LibHLML()
 
 def check_return(ret):
         if (ret != hlml_t.HLML_RETURN.HLML_SUCCESS ):
-            raise HLMLError(ret)
+            print(ret)
         return ret
 
 def hlmlInit() -> None:
@@ -318,7 +318,8 @@ def hlmlDeviceRegisterEvents(
 
 def hlmlEventSetWait(st: hlml_t.HLML_EVENT_SET.TYPE, timeout: int) -> hlml_t.c_hlml_event_data:
     """ Waits on events and delivers events. 
-        If some events are ready to be delivered at the time of the call, function returns immediately. If there are no events ready to be delivered, function sleeps until the event arrives but not longer than the specified timeout.
+        If some events are ready to be delivered at the time of the call, function returns immediately.
+        If there are no events ready to be delivered, function sleeps until the event arrives but not longer than the specified timeout.
     """
     global _hlmlOBJ
     data = hlml_t.c_hlml_event_data()

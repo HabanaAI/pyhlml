@@ -1,4 +1,3 @@
-from pyhlml.main import hlmlDeviceGetPCIEThroughput
 import unittest
 
 import pyhlml
