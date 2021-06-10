@@ -7,7 +7,7 @@ class HLMLError(Exception):
 
     _errcodes = {
         hlml_t.HLML_RETURN.HLML_SUCCESS                    : "No error",
-        hlml_t.HLML_RETURN.HLML_ERROR_UNINITIALIZED        : "Libhlml not initialized",
+        hlml_t.HLML_RETURN.HLML_ERROR_UNINITIALIZED        : "Lib not initialized",
         hlml_t.HLML_RETURN.HLML_ERROR_INVALID_ARGUMENT     : "Invalid argument",
         hlml_t.HLML_RETURN.HLML_ERROR_NOT_SUPPORTED        : "Not supported",
         hlml_t.HLML_RETURN.HLML_ERROR_ALREADY_INITIALIZED  : "Libhlml already initialized",
@@ -21,12 +21,14 @@ class HLMLError(Exception):
         hlml_t.HLML_RETURN.HLML_ERROR_UNKNOWN              : "Unknown"
     }
 
-
     def __init__(self, status_code):
         self.status_code = status_code
         
         if status_code in HLMLError._errcodes:
             print(HLMLError._errcodes[status_code])
+        else:
+            raise HLMLError(hlml_t.HLML_RETURN.HLML_ERROR_UNKNOWN)
+        
     
     def __str__(self):
         try:

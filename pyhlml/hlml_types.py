@@ -32,10 +32,10 @@ class HLML_RETURN:
     HLML_ERROR_INSUFFICIENT_SIZE            = 7
     HLML_ERROR_DRIVER_NOT_LOADED            = 9
     HLML_ERROR_TIMEOUT                      = 10
-    HLML_ERROR_AIP_IS_LOST                  = 15
-    HLML_ERROR_MEMORY                       = 20
-    HLML_ERROR_NO_DATA                      = 21
-    HLML_ERROR_UNKNOWN                      = 49
+    HLML_ERROR_AIP_IS_LOST                  = 11
+    HLML_ERROR_MEMORY                       = 12
+    HLML_ERROR_NO_DATA                      = 13
+    HLML_ERROR_UNKNOWN                      = 14
 
 class HLML_CLOCK_TYPE:
     TYPE                                    = ctypes.c_uint()

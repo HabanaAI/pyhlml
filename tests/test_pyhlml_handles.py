@@ -3,8 +3,6 @@ import subprocess
 
 import pyhlml
 
-_hlmlOBJ = pyhlml.LibHLML()
-
 def count_from_smi():
 	""" Get device count from SMI as a reference """
 	res = subprocess.run(
@@ -14,7 +12,19 @@ def count_from_smi():
 	return res.stdout.decode()
 
 class TestPyHLML_Handles(unittest.TestCase):
+	def setUp(self):
+		pyhlml.hlmlInit()
+
+	def tearDown(self):
+		pyhlml.hlmlShutdown()
 
 	def test_get_handle_by_index(self):
 		""" We expect the number of handles == device count """
-		count = pyhlml.LibHLML 
+		smi_count = count_from_smi()
+		devices = []
+		for i in range(smi_count):
+			device = pyhlml.hlmlDeviceGetHandleByIndex(i)
+			self.assertIsNotNone(device.value)
+			devices.append(device)
+		self.assertEqual(len(devices), smi_count)
+

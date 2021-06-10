@@ -9,7 +9,7 @@ _hlmlOBJ = LibHLML()
 
 def check_return(ret):
         if (ret != hlml_t.HLML_RETURN.HLML_SUCCESS ):
-            print(ret)
+            HLMLError(ret)
         return ret
 
 def hlmlInit() -> None:
