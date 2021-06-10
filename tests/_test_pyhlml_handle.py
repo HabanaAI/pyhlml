@@ -1,11 +1,17 @@
 import unittest
-import sys
+import subprocess
 
 import pyhlml
 
 _hlmlOBJ = pyhlml.LibHLML()
 
 def count_from_smi():
+	""" Get device count from SMI as a reference """
+	res = subprocess.run(
+		["hl-smi", "--query-aip=name", "--format=csv,nounits,noheader", "|", "wc", "-l"],
+		stdout=subprocess.PIPE
+	)
+	return res.stdout.decode()
 
 class TestPyHLML_Handles(unittest.TestCase):
 

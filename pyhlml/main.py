@@ -164,7 +164,7 @@ def hlmlDeviceGetUtilizationRates(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     ret = fn(device, ctypes.byref(hlml_util))
 
     check_return(ret)
-    return hlml_util.a
+    return hlml_util
 
 def hlmlDeviceGetMemoryInfo(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.c_hlml_memory:
     """ Returns the total, used, and free memory in bytes"""

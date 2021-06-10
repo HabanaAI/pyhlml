@@ -12,7 +12,6 @@ class LibHLML:
     def _load_lib(self):
         self.lib_load_lock.acquire()
         try:
-            # This is where I'd load windows ... IF I HAD WINDOWS
             self.lib = ctypes.CDLL("/usr/lib/habanalabs/libhlml.so")
         except Exception as e:
             print(e)
