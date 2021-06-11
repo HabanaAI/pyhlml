@@ -5,7 +5,9 @@ import pyhlml.hlml_types as hlml_t
 from pyhlml.hlml_lib import LibHLML
 from pyhlml.hlml_error import HLMLError
 
-_hlmlOBJ = LibHLML()
+_hlmlOBJ = None
+
+def initLib():
 
 def check_return(ret):
         if (ret != hlml_t.HLML_RETURN.HLML_SUCCESS ):

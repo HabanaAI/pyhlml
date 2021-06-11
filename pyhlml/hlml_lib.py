@@ -1,7 +1,7 @@
 import ctypes
 import threading
 
-from pyhlml.hlml_error import HLMLError
+from pyhlml.hlml_error import HLMLError, ErrorsAsClass
 
 class LibHLML:
     def __init__(self, path="/usr/lib/habanalabs/libhlml.so"):
@@ -14,6 +14,9 @@ class LibHLML:
         self._load_lib() 
 
     def _load_lib(self):
+        # Load HLMLError Classes
+        ErrorsAsClass()
+        
         self.lib_load_lock.acquire()
         try:\
             self.lib = ctypes.CDLL("/usr/lib/habanalabs/libhlml.so")
@@ -46,7 +49,6 @@ class LibHLML:
             self.func_ptr_cache[name] = getattr(self.lib, name)
             return self.func_ptr_cache[name]
         except Exception as e:
-            print(f"Unknown Function Pointer - {name}")
             raise HLMLError(2)
         finally:
             self.lib_load_lock.release()        

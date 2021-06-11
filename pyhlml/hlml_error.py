@@ -1,12 +1,27 @@
-import string
 import sys
+import string
 
 import pyhlml.hlml_types as hlml_t
 
-class HLMLError(Exception):
+def ErrorsAsClass():
+    this_module = sys.modules[__name__]
+    names = [x for x in dir(hlml_t.HLML_RETURN) if x.startswith("HLML_ERROR")]
+    for err in names:
+        class_name = "HLMLError_" + string.capwords(err.replace("HLML_ERROR_", ""), "_").replace("_", "")
+        err_v = getattr(hlml_t.HLML_RETURN, err)
+        def gen_new(val):
+            def new(typ):
+                obj = HLMLError.__new__(typ, val)
+                return obj
+            return new
+        new_class = type(class_name, (HLMLError,), {'__new__': gen_new(err_v)})
+        new_class.__module__ = __name__
+        setattr(this_module, class_name, new_class)
+        HLMLError._cMap[err_v] = new_class
 
+class HLMLError(Exception):
+    _cMap = {}
     _errcodes = {
-        hlml_t.HLML_RETURN.HLML_SUCCESS                    : "No error",
         hlml_t.HLML_RETURN.HLML_ERROR_UNINITIALIZED        : "Lib not initialized",
         hlml_t.HLML_RETURN.HLML_ERROR_INVALID_ARGUMENT     : "Invalid argument",
         hlml_t.HLML_RETURN.HLML_ERROR_NOT_SUPPORTED        : "Not supported",
@@ -21,18 +36,15 @@ class HLMLError(Exception):
         hlml_t.HLML_RETURN.HLML_ERROR_UNKNOWN              : "Unknown"
     }
 
-    def __init__(self, status_code):
-        self.status_code = status_code
+    def __new__(typ, value):
+        if typ == HLMLError:
+            typ = HLMLError._cMap.get(value, typ)
+        obj = Exception.__new__(typ)
+        obj.value = value
+        return obj
         
-        if status_code in HLMLError._errcodes:
-            print(HLMLError._errcodes[status_code])
-        else:
-            raise HLMLError(hlml_t.HLML_RETURN.HLML_ERROR_UNKNOWN)
-        
-    
     def __str__(self):
-        try:
-            return HLMLError._errcodes[self.status_code]
-        except HLMLError:
-            return f"HLML error with code {self.status_code}"
-            
+        return f"HLML Error with code {self.value}"
+
+    def __eq__(self, other):
+        return self.value == self.other.value

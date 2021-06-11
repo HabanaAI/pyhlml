@@ -54,15 +54,15 @@ class TestPyHLML_Handles(unittest.TestCase):
 		devices = []
 		for addr in addrs:
 			device = pyhlml.hlmlDeviceGetHandleByPCIBusID(addr)
+			self.assertIsNotNone(device.value)
 			devices.append(device)
 		self.assertEqual(len(devices), len(addrs))
 	
 	def test_get_handle_by_UUID(self):
 		uuids = uuid_from_smi()
-		print(uuids)
 		devices = []
 		for uid in uuids:
-			print(uid)
 			device = pyhlml.hlmlDeviceGetHandleByPCIBusID(uid)
+			self.assertIsNotNone(device.value)
 			devices.append(device)
 		self.assertEqual(len(devices), len(uuids))
