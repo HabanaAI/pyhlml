@@ -1,13 +1,13 @@
-import sys
-import string
+from string import capwords
+from sys import modules
 
 import pyhlml.hlml_types as hlml_t
 
 def ErrorsAsClass():
-    this_module = sys.modules[__name__]
+    this_module = modules[__name__]
     names = [x for x in dir(hlml_t.HLML_RETURN) if x.startswith("HLML_ERROR")]
     for err in names:
-        class_name = "HLMLError_" + string.capwords(err.replace("HLML_ERROR_", ""), "_").replace("_", "")
+        class_name = "HLMLError_" + capwords(err.replace("HLML_ERROR_", ""), "_").replace("_", "")
         err_v = getattr(hlml_t.HLML_RETURN, err)
         def gen_new(val):
             def new(typ):

@@ -1,13 +1,18 @@
 import ctypes
 
+from sys import modules
+
 import pyhlml.hlml_types as hlml_t
 
 from pyhlml.hlml_lib import LibHLML
-from pyhlml.hlml_error import HLMLError
+from pyhlml.hlml_error import HLMLError, ErrorsAsClass
 
 _hlmlOBJ = None
 
-def initLib():
+def _wrapperInit():
+    """ init module level object and error classes """
+    ErrorsAsClass()
+    setattr(modules[__name__], "_hlmlOBJ", LibHLML())
 
 def check_return(ret):
         if (ret != hlml_t.HLML_RETURN.HLML_SUCCESS ):
@@ -19,6 +24,7 @@ def hlmlInit() -> None:
         Parameters: None
         Returns: None
     """
+    _wrapperInit()
     global _hlmlOBJ
 
     fn = _hlmlOBJ.get_func_ptr("hlml_init")
@@ -34,6 +40,7 @@ def hlmlInitWithFlags(flags=0) -> None:
             flags (int) [ default=0 ] - only the default is supported
         Returns: None
     """
+    _wrapperInit()
     global _hlmlOBJ
 
     fn = _hlmlOBJ.get_func_ptr("hlml_init_with_flags")

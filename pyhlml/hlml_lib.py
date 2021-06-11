@@ -1,22 +1,20 @@
 import ctypes
-import threading
 
-from pyhlml.hlml_error import HLMLError, ErrorsAsClass
+from threading import Lock
+
+from pyhlml.hlml_error import HLMLError
 
 class LibHLML:
     def __init__(self, path="/usr/lib/habanalabs/libhlml.so"):
         self.default_path   = path
         self.lib            = None 
-        self.lib_load_lock  = threading.Lock()
+        self.lib_load_lock  = Lock()
         self.func_ptr_cache = dict()
         self.ref_count      = 0 # INC on init DEC on dest
 
         self._load_lib() 
 
-    def _load_lib(self):
-        # Load HLMLError Classes
-        ErrorsAsClass()
-        
+    def _load_lib(self):   
         self.lib_load_lock.acquire()
         try:\
             self.lib = ctypes.CDLL("/usr/lib/habanalabs/libhlml.so")
