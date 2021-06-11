@@ -82,7 +82,9 @@ def hlmlDeviceGetCount() -> int:
     return count.value
 
 def hlmlDeviceGetHandleByPCIBusID(pci_addr: str) -> hlml_t.HLML_DEVICE.TYPE:
-    """ Acquire the handle for a device, based on PCI Address """
+    """ Acquire the handle for a device, based on PCI Address 
+        Parameters
+    """
     global _hlmlOBJ
 
     device = hlml_t.HLML_DEVICE.TYPE

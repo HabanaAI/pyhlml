@@ -66,3 +66,6 @@ class TestPyHLML_Handles(unittest.TestCase):
 			self.assertIsNotNone(device.value)
 			devices.append(device)
 		self.assertEqual(len(devices), len(uuids))
+
+if __name__ == "__main__":
+	unittest.main()
