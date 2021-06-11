@@ -3,7 +3,6 @@ Python bindings for HLML types
 """
 
 import ctypes
-from typing import TYPE_CHECKING
 
 class HLML_DEVICE:
     TYPE                                    = ctypes.c_void_p()

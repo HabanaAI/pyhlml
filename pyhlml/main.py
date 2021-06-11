@@ -13,8 +13,9 @@ def check_return(ret):
         return ret
 
 def hlmlInit() -> None:
-    """ 
-    Init must be called prior to using any other api function.
+    """ Must be called before any other api can be used
+        Parameters: None
+        Returns: None
     """
     global _hlmlOBJ
 
@@ -25,11 +26,11 @@ def hlmlInit() -> None:
     check_return(ret)
     return None
 
-def hlmlInitWithFlags(flags: int) -> None:
-    """
-    Init must be called prior to using any other api function.
-    Init with flags allows the user to pass an initialization flag. 
-    Currently only 0 is supported. 
+def hlmlInitWithFlags(flags=0) -> None:
+    """ Allows the user to call the init function with a flag.
+        Parameters:
+            flags (int) [ default=0 ] - only the default is supported
+        Returns: None
     """
     global _hlmlOBJ
 
@@ -41,9 +42,9 @@ def hlmlInitWithFlags(flags: int) -> None:
     return None
 
 def hlmlShutdown() -> None:
-    """
-    Shutdown should be called last. 
-    It properly frees any allocated resources.
+    """ Shutdown should be called last.
+        Parameters: None
+        Returns: None
     """
     global _hlmlOBJ 
 
@@ -56,8 +57,11 @@ def hlmlShutdown() -> None:
     return None
 
 def hlmlDeviceGetCount() -> int:
-    """
-    Returns the number of AIP devices in the system.
+    """ Returns the number of Habana devices in the system.
+        Parameters: None
+        Returns:
+            count (int) - Number of habana devices. 
+                          Ex. An HLS1-H would return 4
     """
     global _hlmlOBJ 
     count = ctypes.c_uint()
@@ -74,7 +78,7 @@ def hlmlDeviceGetHandleByPCIBusID(pci_addr: str) -> hlml_t.HLML_DEVICE.TYPE:
 
     device = hlml_t.HLML_DEVICE.TYPE
     fn = _hlmlOBJ.get_func_ptr("hlml_device_get_handle_by_pci_bus_id")
-    ret = fn(pci_addr, ctypes.byref(device))
+    ret = fn(str.encode(pci_addr), ctypes.byref(device))
 
     check_return(ret)
     return device
@@ -96,7 +100,7 @@ def hlmlDeviceGetHandleByUUID(uuid: str) -> hlml_t.HLML_DEVICE.TYPE:
     device = hlml_t.HLML_DEVICE.TYPE
 
     fn = _hlmlOBJ.get_func_ptr("hlml_device_get_handle_by_UUID")
-    ret = fn(uuid, ctypes.byref(device))
+    ret = fn(str.encode(uuid), ctypes.byref(device))
 
     check_return(ret)
     return device
