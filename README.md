@@ -48,5 +48,3 @@ where release is the synapse release and build is the build of this repo ( 0 ind
 
 ### v0.15.0
 - Initial Release
-
-````
