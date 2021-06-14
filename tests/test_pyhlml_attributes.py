@@ -64,7 +64,7 @@ class TestPyHLML_Attributes(unittest.TestCase):
             "HL REV": self.hl_rev,
             "BRD ID": self.brd_id
         }
-
+        print("")
         pp.pprint(output)
 
     def getAttributes(self):
@@ -105,8 +105,8 @@ class TestPyHLML_Attributes(unittest.TestCase):
 
     def get_ecc_mode(self):
         res = pyhlml.hlmlDeviceGetECCMode(self.device)
-        self.current_ecc_mode = res['current']
-        self.pending_ecc_mode = res['pending']
+        self.current_ecc_mode = res.current
+        self.pending_ecc_mode = res.pending
         self.assertIsNotNone(self.current_ecc_mode)
         self.assertIsNotNone(self.pending_ecc_mode)
 

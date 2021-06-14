@@ -240,18 +240,23 @@ def hlmlDeviceGetPowerManagementDefaultLimit(device: hlml_t.HLML_DEVICE.TYPE) ->
     ret = fn(device, ctypes.byref(power))
 
     check_return(ret)
-    return power
+    return power.value
 
 def hlmlDeviceGetECCMode(device: hlml_t.HLML_DEVICE.TYPE) -> dict:
     """ Retrieves the current and pending ECC modes of the device """
     global _hlmlOBJ
+    out = hlml_t.hlml_ecc_mode()
     current = ctypes.c_uint()
     pending = ctypes.c_uint()
 
     fn = _hlmlOBJ.get_func_ptr("hlml_device_get_ecc_mode")
     ret = fn(device, ctypes.byref(current), ctypes.byref(pending))
 
-    return { "current": current.value, "pending": pending.value }
+    check_return(ret)
+    setattr(out, "current", current)
+    setattr(out, "pending", pending)
+
+    return out
 
 def hlmlDeviceGetTotalECCErrors(
     device: hlml_t.HLML_DEVICE.TYPE, error_type: hlml_t.HLML_MEMORY_ERROR.TYPE, 
@@ -277,10 +282,10 @@ def hlmlDeviceGetUUID(device: hlml_t.HLML_DEVICE.TYPE) -> str:
     name = ctypes.create_string_buffer(hlml_t.HLML_DEFINE.HL_FIELD_MAX_SIZE)
     
     fn = _hlmlOBJ.get_func_ptr("hlml_device_get_uuid")
-    ret = fn(device, ctypes.byref(name), hlml_t.HLML_DEFINE.HL_FIELD_MAX_SIZE)
+    ret = fn(device, ctypes.byref(name), 256)
 
     check_return(ret)
-    return name
+    return name.value
 
 def hlmlDeviceGetMinorNumber(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     """ Retrieves the minor number of the device ( maps to the device node file )
@@ -293,7 +298,7 @@ def hlmlDeviceGetMinorNumber(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     ret = fn(device, ctypes.byref(number))
 
     check_return(ret)
-    return number
+    return number.value
 
 def hlmlEventSetCreate() -> hlml_t.HLML_EVENT_SET.TYPE:
     """ Create an empty set of events """
@@ -401,10 +406,10 @@ def hlmlDeviceGetSerial(device: hlml_t.HLML_DEVICE.TYPE) -> str:
     ser = ctypes.create_string_buffer(hlml_t.HLML_DEFINE.HL_FIELD_MAX_SIZE)
 
     fn = _hlmlOBJ.get_func_ptr("hlml_device_get_serial")
-    ret = fn(device, ctypes.byref(ser))
+    ret = fn(device, ctypes.byref(ser), 256)
 
     check_return(ret)
-    return ser
+    return ser.value
 
 def hlmlDeviceGetBoardID(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     """ Retrieves the device boardID ( 0 - 7 ) """

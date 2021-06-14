@@ -188,9 +188,10 @@ class c_hlml_mac_info(_PrintS):
                 ("id", ctypes.c_int)
                ]
 
-"""
-Helpers
-"""
+class hlml_ecc_mode(_PrintS):
+    _fields_ = [("current", ctypes.c_uint), 
+                ("pending", ctypes.c_uint)
+               ]
 
 ## Alternative object
 # Allows the object to be printed
