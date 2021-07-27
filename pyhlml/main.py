@@ -439,6 +439,11 @@ def hlmlEventSetWait(st: hlml_t.HLML_EVENT_SET.TYPE, timeout: int) -> hlml_t.c_h
     """ Waits on events and delivers events. 
         If some events are ready to be delivered at the time of the call, function returns immediately.
         If there are no events ready to be delivered, function sleeps until the event arrives but not longer than the specified timeout.
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+            timeout (int) - The maximum time to wait for a new event.
+        Returns: 
+            data (c_hlml_event_data) - The data from events ready to be delivered.
     """
     global _hlmlOBJ
     data = hlml_t.c_hlml_event_data()
