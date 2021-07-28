@@ -10,14 +10,23 @@ from pyhlml.hlml_error import HLMLError, ErrorsAsClass
 _hlmlOBJ = None
 
 def _wrapperInit():
-    """ init module level object and error classes """
+    """ init module level object and error classes 
+        Parameters: None
+        Returns: None
+    """
     ErrorsAsClass()
     setattr(modules[__name__], "_hlmlOBJ", LibHLML())
 
 def check_return(ret):
-        if (ret != hlml_t.HLML_RETURN.HLML_SUCCESS ):
-            HLMLError(ret)
-        return ret
+    """ Checks ret for any error.
+        Parameters: 
+            ret - Symbol for checking if return was valid.
+        Returns: 
+            ret - Symbol for current error status.
+    """
+    if (ret != hlml_t.HLML_RETURN.HLML_SUCCESS ):
+        HLMLError(ret)
+    return ret
 
 def hlmlInit() -> None:
     """ Must be called before any other api can be used
@@ -83,7 +92,10 @@ def hlmlDeviceGetCount() -> int:
 
 def hlmlDeviceGetHandleByPCIBusID(pci_addr: str) -> hlml_t.HLML_DEVICE.TYPE:
     """ Acquire the handle for a device, based on PCI Address 
-        Parameters
+        Parameters:
+            pci_addr (str) - The PCI Address of a habana device.
+        Returns:
+            device (HLML_DEVICE.TYPE) - The handle for the habana device.
     """
     global _hlmlOBJ
 
@@ -95,7 +107,12 @@ def hlmlDeviceGetHandleByPCIBusID(pci_addr: str) -> hlml_t.HLML_DEVICE.TYPE:
     return device
 
 def hlmlDeviceGetHandleByIndex(index: int) -> hlml_t.HLML_DEVICE.TYPE:
-    """ Acquire device handle by index """
+    """ Acquire device handle by index 
+        Parameters:
+            index (int) - The index of a habana device. 
+        Returns:
+            device (HLML_DEVICE.TYPE) - The handle for the habana device.
+    """
     global _hlmlOBJ
     device = hlml_t.HLML_DEVICE.TYPE
 
@@ -106,7 +123,12 @@ def hlmlDeviceGetHandleByIndex(index: int) -> hlml_t.HLML_DEVICE.TYPE:
     return device
 
 def hlmlDeviceGetHandleByUUID(uuid: str) -> hlml_t.HLML_DEVICE.TYPE:
-    """ Acquire device handle by UUID """
+    """ Acquire device handle by UUID 
+        Parameters:
+            uuid (str) - A Universal Unique ID for a habana device to access.
+        Returns:
+            device (HLML_DEVICE.TYPE) - The handle for the habana device.
+    """
     global _hlmlOBJ
     device = hlml_t.HLML_DEVICE.TYPE
 
@@ -117,7 +139,12 @@ def hlmlDeviceGetHandleByUUID(uuid: str) -> hlml_t.HLML_DEVICE.TYPE:
     return device
 
 def hlmlDeviceGetName(device: hlml_t.HLML_DEVICE.TYPE) -> str:
-    """ Acquire name of device from handle """
+    """ Acquire name of device from handle 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            name (str) - The name of the habana device.
+    """
     global _hlmlOBJ
     name = ctypes.create_string_buffer(hlml_t.HLML_DEFINE.HL_FIELD_MAX_SIZE)
 
@@ -131,7 +158,12 @@ def hlmlDeviceGetName(device: hlml_t.HLML_DEVICE.TYPE) -> str:
     return name.value
 
 def hlmlDeviceGetPCIInfo(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.c_hlml_pci_info:
-    """ Get the PCI attributes of input device """
+    """ Get the PCI attributes of input device 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            pci_info (c_hlml_pci_info) - The PCI attributes of the given device.
+    """
     global _hlmlOBJ
     pci_info = hlml_t.c_hlml_pci_info()
     
@@ -146,7 +178,11 @@ def hlmlDeviceGetPCIInfo(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.c_hlml_pci_i
 
 def hlmlDeviceGetClockInfo(device: hlml_t.HLML_DEVICE.TYPE, clock_type=0 ) -> int:
     """ Retrives the current speed of the selected clock (MHz)
-        clock_type ( 0-SOC ( GAUDI ) / 1-IC ( GOYA ) / 2-MME ( GOYA ) / 3-TPC ( GOYA ) )
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+            clock_type ( 0-SOC ( GAUDI ) / 1-IC ( GOYA ) / 2-MME ( GOYA ) / 3-TPC ( GOYA ) )
+        Returns:
+            speed (int) - The clock speed of the selected clock in MHz.
     """
     global _hlmlOBJ
     speed = ctypes.c_uint()
@@ -159,7 +195,11 @@ def hlmlDeviceGetClockInfo(device: hlml_t.HLML_DEVICE.TYPE, clock_type=0 ) -> in
 
 def hlmlDeviceGetMaxClockInfo(device: hlml_t.HLML_DEVICE.TYPE, clock_type=0 ) -> int:
     """ Retrives the maximum speed of the selected clock (MHz)
-        clock_type ( 0-SOC ( GAUDI ) / 1-IC ( GOYA ) / 2-MME ( GOYA ) / 3-TPC ( GOYA ) )
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+            clock_type ( 0-SOC ( GAUDI ) / 1-IC ( GOYA ) / 2-MME ( GOYA ) / 3-TPC ( GOYA ) )
+        Returns:
+            speed (int) - The MAXIMUM clock speed of the selected clock in MHz.
     """
     global _hlmlOBJ
     speed = ctypes.c_uint()
@@ -171,7 +211,12 @@ def hlmlDeviceGetMaxClockInfo(device: hlml_t.HLML_DEVICE.TYPE, clock_type=0 ) ->
     return speed.value 
 
 def hlmlDeviceGetUtilizationRates(device: hlml_t.HLML_DEVICE.TYPE) -> int: 
-    """ Returns utilization over the past second as a percentage """
+    """ Returns utilization over the past second as a percentage 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            hlml_util (int) - The utilization rate over the last second as a percentage.
+    """
     global _hlmlOBJ
     hlml_util = hlml_t.c_hlml_utilization()
 
@@ -182,7 +227,12 @@ def hlmlDeviceGetUtilizationRates(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     return hlml_util.aip
 
 def hlmlDeviceGetMemoryInfo(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.c_hlml_memory:
-    """ Returns the total, used, and free memory in bytes"""
+    """ Returns the total, used, and free memory in bytes
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            hlml_mem (c_hlml_memory) - The total memory and how much is used/free in bytes.
+    """
     global _hlmlOBJ
     hlml_mem = hlml_t.c_hlml_memory()
 
@@ -196,7 +246,11 @@ def hlmlDeviceGetTemperature(
         device: hlml_t.HLML_DEVICE.TYPE, sensor_type: hlml_t.HLML_TEMP_SENS.TYPE
     ) -> int:
     """ Retrives the current temperature (celsius) of the selected sensor_type 
-        sensor_types ( 0-AIP / 1-BOARD )
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device. 
+            sensor_types ( 0-AIP / 1-BOARD )
+        Returns:
+            temp (int) - The temperature recorded at the given sensor in celsius.
     """
     global _hlmlOBJ
     temp = ctypes.c_uint()
@@ -209,7 +263,11 @@ def hlmlDeviceGetTemperature(
 
 def hlmlDeviceGetTemperatureThreshold(device: hlml_t.HLML_DEVICE.TYPE, threshold_type: int) -> int:
     """ Retrieves the known temperature (celsius) threshold of the requested type 
-        threshold_type (0-shutdown / 1-slowdown / 2-memory / 3-gpu )
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+            threshold_type (0-shutdown / 1-slowdown / 2-memory / 3-gpu ) -  Which threshold temp to check.
+        Returns:
+            temp (int) - The temperature the given threshold is set at in celsius.
     """
     global _hlmlOBJ
     temp = ctypes.c_uint()
@@ -221,7 +279,12 @@ def hlmlDeviceGetTemperatureThreshold(device: hlml_t.HLML_DEVICE.TYPE, threshold
     return temp.value
 
 def hlmlDeviceGetPowerUsage(device: hlml_t.HLML_DEVICE.TYPE) -> int:
-    """ Retrieves power usage for the device in mW """
+    """ Retrieves power usage for the device in mW 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            power (int) - The given device's power usage in mW.
+    """
     global _hlmlOBJ
     power = ctypes.c_uint()
 
@@ -232,7 +295,12 @@ def hlmlDeviceGetPowerUsage(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     return power.value
 
 def hlmlDeviceGetPowerManagementDefaultLimit(device: hlml_t.HLML_DEVICE.TYPE) -> int:
-    """ Retrieves default power management limit on this device in mW """
+    """ Retrieves default power management limit on this device in mW 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            power (int) - The power limit on the device in mW. 
+    """
     global _hlmlOBJ
     power = ctypes.c_uint()
 
@@ -243,7 +311,12 @@ def hlmlDeviceGetPowerManagementDefaultLimit(device: hlml_t.HLML_DEVICE.TYPE) ->
     return power.value
 
 def hlmlDeviceGetECCMode(device: hlml_t.HLML_DEVICE.TYPE) -> dict:
-    """ Retrieves the current and pending ECC modes of the device """
+    """ Retrieves the current and pending ECC modes of the device 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            out (dict) - The current and pending ECC modes for the device.
+    """
     global _hlmlOBJ
     out = hlml_t.hlml_ecc_mode()
     current = ctypes.c_uint()
@@ -264,8 +337,12 @@ def hlmlDeviceGetTotalECCErrors(
     ) -> int:
     """ Returns the number of ECC errors for a device. Number is from the last reset, or driver
         reinstall. Currently only the number of corrected errors is supported.
-        error_type ( 0-CORRECTED / 1-UNCORRECTED )
-        counter_type ( 0-VOLATILE / 1-AGGREGATE )
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+            error_type ( 0-CORRECTED / 1-UNCORRECTED ) - The type of errors to count.
+            counter_type ( 0-VOLATILE / 1-AGGREGATE ) - The type of counter to use.
+        Returns:
+            count (int) - The number of ECC errors for the device, specified by parameters.
     """
     global _hlmlOBJ
     count = ctypes.c_longlong()
@@ -277,7 +354,12 @@ def hlmlDeviceGetTotalECCErrors(
     return count.value
 
 def hlmlDeviceGetUUID(device: hlml_t.HLML_DEVICE.TYPE) -> str:
-    """ Returns the UUID of the device """
+    """ Returns the UUID of the device 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            name (str) - The UUID for the given device. 
+    """
     global _hlmlOBJ
     name = ctypes.create_string_buffer(hlml_t.HLML_DEFINE.HL_FIELD_MAX_SIZE)
     
@@ -290,6 +372,10 @@ def hlmlDeviceGetUUID(device: hlml_t.HLML_DEVICE.TYPE) -> str:
 def hlmlDeviceGetMinorNumber(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     """ Retrieves the minor number of the device ( maps to the device node file )
         at /sys/class/habanalabs/hl[minor]
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            number (int) - The minor number for the device.
     """
     global _hlmlOBJ
     number = ctypes.c_uint()
@@ -301,7 +387,11 @@ def hlmlDeviceGetMinorNumber(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     return number.value
 
 def hlmlEventSetCreate() -> hlml_t.HLML_EVENT_SET.TYPE:
-    """ Create an empty set of events """
+    """ Create an empty set of events 
+        Parameters: None.
+        Returns:
+            st (HLML_EVENT_SET) - An empty set of events.
+    """
     global _hlmlOBJ
     st = hlml_t.HLML_EVENT_SET.TYPE
 
@@ -312,7 +402,11 @@ def hlmlEventSetCreate() -> hlml_t.HLML_EVENT_SET.TYPE:
     return st
 
 def hlmlEventSetFree(st: hlml_t.HLML_EVENT_SET.TYPE) -> None:
-    """ Release a set of events """
+    """ Release a set of events 
+        Parameters:
+            st (HLML_EVENT_SET) - The set of events to be released.
+        Returns: None.
+    """
     global _hlmlOBJ
     
     fn = _hlmlOBJ.get_func_ptr("hlml_event_set_free")
@@ -326,7 +420,12 @@ def hlmlDeviceRegisterEvents(
         st: hlml_t.HLML_EVENT_SET.TYPE
     ) -> None:
     """ Start recording events on input device add events to input set
-        event_types ( 0-ECC_err / 1-Crit_err / 2-Clock_change ) 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+            event_types ( 0-ECC_err / 1-Crit_err / 2-Clock_change ) - The type of events to start recording.
+            st (HLML_EVENT_SET) - The set of events to be released.
+        Returns: None.
+        
     """
     global _hlmlOBJ
 
@@ -340,6 +439,11 @@ def hlmlEventSetWait(st: hlml_t.HLML_EVENT_SET.TYPE, timeout: int) -> hlml_t.c_h
     """ Waits on events and delivers events. 
         If some events are ready to be delivered at the time of the call, function returns immediately.
         If there are no events ready to be delivered, function sleeps until the event arrives but not longer than the specified timeout.
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+            timeout (int) - The maximum time to wait for a new event.
+        Returns: 
+            data (c_hlml_event_data) - The data from events ready to be delivered.
     """
     global _hlmlOBJ
     data = hlml_t.c_hlml_event_data()
@@ -354,8 +458,12 @@ def hlmlDeviceGetMACInfo(
         device: hlml_t.HLML_DEVICE.TYPE, count=20, start=0
     ) -> hlml_t.c_hlml_mac_info:
     """ Get MAC addresses of device.
-        Count - how many addresses to return
-        Start - index to start at
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+            Count (int) - How many addresses to return.
+            Start (int) - The index to start at.
+        Returns:
+            mac (c_hlml_mac_info) - The MAC addresses of the device.
     """
     global _hlmlOBJ
     mac = hlml_t.c_hlml_mac_info()
@@ -368,7 +476,10 @@ def hlmlDeviceGetMACInfo(
 
 def hlmlDeviceERRInject(device: hlml_t.HLML_DEVICE.TYPE, err_type: int) -> None:
     """ Inject error to test response 
-        err_type ( 0-endless_cmd / 1-non_fatal / 2-fatal / 3-lose_heartbeat / 4-thermal)
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+            err_type ( 0-endless_cmd / 1-non_fatal / 2-fatal / 3-lose_heartbeat / 4-thermal) - The type of error to inject.
+        Returns: None.
     """
     global _hlmlOBJ
 
@@ -379,7 +490,12 @@ def hlmlDeviceERRInject(device: hlml_t.HLML_DEVICE.TYPE, err_type: int) -> None:
     return None
 
 def hlmlDeviceGetHLRevision(device: hlml_t.HLML_DEVICE.TYPE) -> int:
-    """ Returns HL revision """
+    """ Returns HL revision 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            rev (int) - The HL revision
+    """
     global _hlmlOBJ
     rev = ctypes.c_int()
 
@@ -390,7 +506,12 @@ def hlmlDeviceGetHLRevision(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     return rev.value
 
 def hlmlDeviceGetPCBInfo(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.c_hlml_pcb_info:
-    """ Returns the PCB info """
+    """ Returns the PCB info 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            pcb (c_hlml_pcb_info) - The info about the device's PCB.
+    """
     global _hlmlOBJ
     pcb = hlml_t.c_hlml_pcb_info()
 
@@ -401,7 +522,12 @@ def hlmlDeviceGetPCBInfo(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.c_hlml_pcb_i
     return pcb
 
 def hlmlDeviceGetSerial(device: hlml_t.HLML_DEVICE.TYPE) -> str:
-    """ Returns the unique board sn """
+    """ Returns the unique board sn 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            ser (str) - The serial number of the device.  
+    """
     global _hlmlOBJ
     ser = ctypes.create_string_buffer(hlml_t.HLML_DEFINE.HL_FIELD_MAX_SIZE)
 
@@ -412,7 +538,12 @@ def hlmlDeviceGetSerial(device: hlml_t.HLML_DEVICE.TYPE) -> str:
     return ser.value
 
 def hlmlDeviceGetBoardID(device: hlml_t.HLML_DEVICE.TYPE) -> int:
-    """ Retrieves the device boardID ( 0 - 7 ) """
+    """ Retrieves the device boardID ( 0 - 7 ) 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            brd (int) - The board id of which slot the device is in.  
+    """
     global _hlmlOBJ
     brd = ctypes.c_uint()
 
@@ -425,6 +556,11 @@ def hlmlDeviceGetBoardID(device: hlml_t.HLML_DEVICE.TYPE) -> int:
 def hlmlDeviceGetPCIEThroughput(device: hlml_t.HLML_DEVICE.TYPE, counter_type: int) -> int:
     """ Retrieve PCIe utilization information ( over 10ms interval ) 
         counter_type ( 0-TX / 1-RX )
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+            counter_type (int) -----------------------------------------------------------------------------
+        Returns: 
+            throughput (int) - The throughput on the PCIE Transfer or Recieve Connection.
     """
     global _hlmlOBJ
     pcie = ctypes.c_uint()
@@ -436,7 +572,12 @@ def hlmlDeviceGetPCIEThroughput(device: hlml_t.HLML_DEVICE.TYPE, counter_type: i
     return 
 
 def hlmlDeviceGetPCIEReplayCounter(device: hlml_t.HLML_DEVICE.TYPE) -> int:
-    """ Retrieve the PCIe replay counter """
+    """ Retrieve the PCIe replay counter 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns: 
+            pcie (int) - The replay counter of the PCIE device.
+    """
     global _hlmlOBJ
     pcie = ctypes.c_uint()
 
@@ -447,7 +588,12 @@ def hlmlDeviceGetPCIEReplayCounter(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     return pcie.value
 
 def hlmlDeviceGetCurrPCIELinkGeneration(device: hlml_t.HLML_DEVICE.TYPE) -> int:
-    """ Retrieve the current PCIe link generation """
+    """ Retrieve the current PCIe link generation 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns: 
+            link (int) - The generation of the device's PCIe link.
+    """
     global _hlmlOBJ
     link = ctypes.c_uint()
 
@@ -458,7 +604,12 @@ def hlmlDeviceGetCurrPCIELinkGeneration(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     return link.value
 
 def hlmlDeviceGetCurrPCIELinkWidth(device: hlml_t.HLML_DEVICE.TYPE) -> int:
-    """ Retrieve the current PCIe link width """
+    """ Retrieve the current PCIe link width 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            width (int) - The width or lanes of the PCIE connection.
+    """
     global _hlmlOBJ
     width = ctypes.c_uint()
 
@@ -469,7 +620,12 @@ def hlmlDeviceGetCurrPCIELinkWidth(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     return width.value
 
 def hlmlDeviceGetCurrentClocksThrottleReasons(device: hlml_t.HLML_DEVICE.TYPE) -> int:
-    """ Retrieves the current clocks reason for throttling """
+    """ Retrieves the current clocks reason for throttling 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            reason (int) - A code for the reason for the current clock throttle.
+    """
     global _hlmlOBJ
     reason = ctypes.c_ulonglong()
     
@@ -480,7 +636,12 @@ def hlmlDeviceGetCurrentClocksThrottleReasons(device: hlml_t.HLML_DEVICE.TYPE) -
     return reason.value
 
 def hlmlDeviceGetTotalEnergyConsumption(device: hlml_t.HLML_DEVICE.TYPE) -> int:
-    """ Retrieves total energy consumption in mJ since the driver was last reloaded """
+    """ Retrieves total energy consumption in mJ since the driver was last reloaded 
+        Parameters: 
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            energy (int) - Total energy consumption of the habana device.
+    """
     global _hlmlOBJ
     energy = ctypes.c_ulonglong()
 
@@ -489,3 +650,5 @@ def hlmlDeviceGetTotalEnergyConsumption(device: hlml_t.HLML_DEVICE.TYPE) -> int:
 
     check_return(ret)
     return energy.value
+
+
