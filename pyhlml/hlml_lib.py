@@ -16,7 +16,7 @@ class LibHLML:
 
     def _load_lib(self):   
         self.lib_load_lock.acquire()
-        try:\
+        try:
             self.lib = ctypes.CDLL("/usr/lib/habanalabs/libhlml.so")
         except Exception as e:
             print("Failed to load libhlml")

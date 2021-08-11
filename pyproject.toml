@@ -1,15 +1,6 @@
-[tool.poetry]
-name = "y"
-version = "y"
-description = "Python3 Wrapper for the HLML Library"
-authors = ["Keegan van Gemeren <76065987+k-vangemeren@users.noreply.github.com>"]
-license = "n"
-
-[tool.poetry.dependencies]
-python = "^3.9"
-
-[tool.poetry.dev-dependencies]
-
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = [
+	"setuptools>=42",
+	"wheel"
+]
+build-backend = "setuptools.build_meta"
