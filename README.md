@@ -13,7 +13,7 @@ In the future you will be able to install this library with pip.
 ### Install - PIP
 
 ```bash
-$ pip install pyhlml
+$ pip3 install -e git+https://github.com/lamatriz/pyhlml.git#egg=pyhlml
 ```
 
 ### Basic Usage
