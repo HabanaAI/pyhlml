@@ -47,7 +47,7 @@ class HLML_CLOCK_TYPE:
 class HLML_TEMP_SENS:
     TYPE                                    = ctypes.c_uint()
     HLML_TEMPERATURE_ON_AIP                 = 0
-    HLML_TEMPERATIRE_ON_BOARD               = 1
+    HLML_TEMPERATURE_ON_BOARD               = 1
 
 class HLML_TEMP_THRESH:
     TYPE                                    = ctypes.c_uint()
