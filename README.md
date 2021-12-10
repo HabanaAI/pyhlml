@@ -3,7 +3,7 @@ Python3 wrapper for the HLML library
 
 ## Getting Started
 
-In the future you will be able to install this library with pip.
+The pyhlml library is an python API wrapper for the Synapse HLML library, documented here: https://docs.habana.ai/en/latest/API_Reference_Guides/HLML_API_Reference.html
 
 ### Requirements
 
