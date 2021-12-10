@@ -9,11 +9,12 @@ In the future you will be able to install this library with pip.
 
 - Python3
 - Habana-enabled device ( inc. Drivers/Firmware )
+- Synapse version 1.0.1-81 or later
 
 ### Install - PIP
 
 ```bash
-$ pip3 install -e git+https://github.com/lamatriz/pyhlml.git#egg=pyhlml
+$ pip3 install -e git+https://github.com/HabanaAI/pyhlml.git#egg=pyhlml
 ```
 
 ### Basic Usage
@@ -48,3 +49,6 @@ where release is the synapse release and build is the build of this repo ( 0 ind
 
 ### v0.15.0
 - Initial Release
+
+### v1.0.1
+- Current Release
