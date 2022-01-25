@@ -35,7 +35,7 @@ spec:
             #!/bin/bash
             echo "10.0.199.23 utils-sonarqube" >> /etc/hosts
             echo "code scanning"
-            sonar-scanner -Dproject.settings=sonar.properties -Dsonar.login=bcbe0d071a62bab52b3e5df6fe8cd4444c0ee149 -Dsonar.host.url=http://utils-sonarqube
+            sonar-scanner -Dproject.settings=sonar.properties -Dsonar.login=<password> -Dsonar.host.url=http://utils-sonarqube
         - name: pyhlml-build-step
           image: docker.io/lamatriz/blueprint:scripts_latest
           imagePullPolicy: Always
@@ -45,7 +45,7 @@ spec:
             echo "poetry repo config"
             poetry config repositories.genart http://10.3.162.8/artifactory/api/pypi/devpypi
             echo "poetry build & publish"
-            poetry publish -r genart --username devpypi --password P@ssw0rd --build
+            poetry publish -r genart --username devpypi --password <password> --build
         - name: pyhlml-test-step
           volumeMounts:
             - name: ssh-key
