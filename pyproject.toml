@@ -1,6 +1,16 @@
+[tool.poetry]
+name = "pyhlml"
+version = "0.1.0"
+description = "tetsing"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+setuptools = ">=42"
+wheel = "^0.37.0"
+
+[tool.poetry.dev-dependencies]
+
 [build-system]
-requires = [
-	"setuptools>=42",
-	"wheel"
-]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
