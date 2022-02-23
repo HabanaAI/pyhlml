@@ -15,6 +15,27 @@ spec:
             secret:
               secretName: pipeline-autodeploy-key
               defaultMode: 0400
+        env:
+          - name: SONARQUBE_USER
+            valueFrom:
+              secretKeyRef:
+                name: pyhlml-creds
+                key: SONARQUBE_USER
+          - name: SONARQUBE_PASS
+            valueFrom:
+              secretKeyRef:
+                name: pyhlml-creds
+                key: SONARQUBE_PASS
+          - name: ARTIFACTORY_PYPI_USER
+            valueFrom:
+              secretKeyRef:
+                name: pyhlml-creds
+                key: ARTIFACTORY_PYPI_USER
+          - name: ARTIFACTORY_PYPI_PASS
+            valueFrom:
+              secretKeyRef:
+                name: pyhlml-creds
+                key: ARTIFACTORY_PYPI_PASS
         stepTemplate:
           image: uses:jenkins-x/jx3-pipeline-catalog/tasks/nop/pullrequest.yaml@versionStream
           name: ""
@@ -35,7 +56,7 @@ spec:
             #!/bin/bash
             echo "10.0.199.23 utils-sonarqube" >> /etc/hosts
             echo "code scanning"
-            sonar-scanner -Dproject.settings=sonar.properties -Dsonar.login=<password> -Dsonar.host.url=http://utils-sonarqube
+            sonar-scanner -Dproject.settings=sonar.properties -Dsonar.login=$SONARQUBE_PASS -Dsonar.host.url=http://utils-sonarqube
         - name: pyhlml-build-step
           image: docker.io/lamatriz/blueprint:scripts_latest
           imagePullPolicy: Always
@@ -45,7 +66,7 @@ spec:
             echo "poetry repo config"
             poetry config repositories.genart http://10.3.162.8/artifactory/api/pypi/devpypi
             echo "poetry build & publish"
-            poetry publish -r genart --username devpypi --password <password> --build
+            poetry publish -r genart --username $ARTIFACTORY_PYPI_USER --password $ARTIFACTORY_PYPI_PASS --build
         - name: pyhlml-test-step
           volumeMounts:
             - name: ssh-key
