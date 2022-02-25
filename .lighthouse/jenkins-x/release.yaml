@@ -45,6 +45,8 @@ spec:
         - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
           name: ""
           resources: {}
+        - name: next-version
+          resources: {}
         - name: jx-variables
           resources: {}
         ### BEGIN CUSTOM STEP
