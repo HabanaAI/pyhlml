@@ -15,7 +15,9 @@ spec:
             secret:
               secretName: pipeline-autodeploy-key
               defaultMode: 0400
-        env:
+        stepTemplate:
+          image: uses:jenkins-x/jx3-pipeline-catalog/tasks/nop/pullrequest.yaml@versionStream
+          env:
           - name: SONARQUBE_USER
             valueFrom:
               secretKeyRef:
@@ -36,8 +38,6 @@ spec:
               secretKeyRef:
                 name: pyhlml-creds
                 key: ARTIFACTORY_PYPI_PASS
-        stepTemplate:
-          image: uses:jenkins-x/jx3-pipeline-catalog/tasks/nop/pullrequest.yaml@versionStream
           name: ""
           resources: {}
           workingDir: /workspace/source
