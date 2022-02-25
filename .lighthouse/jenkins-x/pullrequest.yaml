@@ -54,6 +54,10 @@ spec:
           resources: {}
           script: |
             #!/bin/bash
+            echo "SonarQube Password"
+            echo "-------------------------"
+            echo ${SONARQUBE_PASS}
+            echo "-------------------------"
             echo "10.0.199.23 utils-sonarqube" >> /etc/hosts
             echo "code scanning"
             sonar-scanner -Dproject.settings=sonar.properties -Dsonar.login=${SONARQUBE_PASS} -Dsonar.host.url=http://utils-sonarqube
