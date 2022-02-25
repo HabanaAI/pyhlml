@@ -16,7 +16,7 @@ spec:
               secretName: pipeline-autodeploy-key
               defaultMode: 0400
         stepTemplate:
-          image: uses:jenkins-x/jx3-pipeline-catalog/tasks/nop/pullrequest.yaml@versionStream
+          image: uses:jenkins-x/jx3-pipeline-catalog/tasks/nop/release.yaml@versionStream
           env:
           - name: SONARQUBE_USER
             valueFrom:
@@ -42,7 +42,7 @@ spec:
           resources: {}
           workingDir: /workspace/source
         steps:
-        - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone-pr.yaml@versionStream
+        - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
           name: ""
           resources: {}
         - name: jx-variables
