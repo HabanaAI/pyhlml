@@ -10,21 +10,86 @@ spec:
       resources: {}
       taskSpec:
         metadata: {}
+        volumes:
+          - name: ssh-key
+            secret:
+              secretName: pipeline-autodeploy-key
+              defaultMode: 0400
         stepTemplate:
-          image: uses:jenkins-x/jx3-pipeline-catalog/tasks/nop/release.yaml@versionStream
+          image: uses:jenkins-x/jx3-pipeline-catalog/tasks/nop/pullrequest.yaml@versionStream
+          env:
+          - name: SONARQUBE_USER
+            valueFrom:
+              secretKeyRef:
+                name: pyhlml-creds
+                key: SONARQUBE_USER
+          - name: SONARQUBE_PASS
+            valueFrom:
+              secretKeyRef:
+                name: pyhlml-creds
+                key: SONARQUBE_PASS
+          - name: ARTIFACTORY_PYPI_USER
+            valueFrom:
+              secretKeyRef:
+                name: pyhlml-creds
+                key: ARTIFACTORY_PYPI_USER
+          - name: ARTIFACTORY_PYPI_PASS
+            valueFrom:
+              secretKeyRef:
+                name: pyhlml-creds
+                key: ARTIFACTORY_PYPI_PASS
           name: ""
           resources: {}
           workingDir: /workspace/source
         steps:
-        - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
+        - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone-pr.yaml@versionStream
           name: ""
-          resources: {}
-        - name: next-version
           resources: {}
         - name: jx-variables
           resources: {}
-        - name: build-dummy-release
+        ### BEGIN CUSTOM STEP
+        - name: pyhlml-codescan-step
+          image: docker.io/lamatriz/blueprint:scripts_latest
+          imagePullPolicy: Always
           resources: {}
+          script: |
+            #!/bin/bash
+            echo "SonarQube Password"
+            echo "-------------------------"
+            echo ${SONARQUBE_PASS}
+            echo "-------------------------"
+            echo "10.0.199.23 utils-sonarqube" >> /etc/hosts
+            echo "code scanning"
+            sonar-scanner -Dproject.settings=sonar.properties -Dsonar.login=${SONARQUBE_PASS} -Dsonar.host.url=http://utils-sonarqube
+        - name: pyhlml-build-step
+          image: docker.io/lamatriz/blueprint:scripts_latest
+          imagePullPolicy: Always
+          resources: {}
+          script: |
+            #!/bin/bash
+            echo "poetry repo config"
+            poetry config repositories.genart http://10.3.162.8/artifactory/api/pypi/devpypi
+            echo "poetry build & publish"
+            poetry publish -r genart --username ${ARTIFACTORY_PYPI_USER} --password ${ARTIFACTORY_PYPI_PASS} --build
+        - name: pyhlml-test-step
+          volumeMounts:
+            - name: ssh-key
+              readOnly: true
+              mountPath: /root/.ssh
+          image: ubuntu:20.04
+          resources: {}
+          script: |
+            #!/bin/bash
+            apt-get update &> .update.log && apt-get -y install openssh-client rsync git &> .install.log
+            ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@10.0.199.67 /bin/bash << EOF
+                sudo pip uninstall -y pyhlml
+                sudo pip install pyhlml --index http://${ARTIFACTORY_PYPI_USER}:${ARTIFACTORY_PYPI_PASS}@genart/artifactory/api/pypi/devpypi-local/simple --trusted-host genart
+                echo "-------------------"
+                echo "test execution"
+                echo "-------------------"
+                python pyhlml-test.py
+            EOF
+        ### END CUSTOM STEP
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 12h0m0s
