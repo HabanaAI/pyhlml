@@ -82,12 +82,12 @@ spec:
             #!/bin/bash
             apt-get update &> .update.log && apt-get -y install openssh-client rsync git &> .install.log
             ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@10.0.199.67 /bin/bash << EOF
-                sudo pip3 uninstall -y pyhlml
-                sudo pip3 install pyhlml --trusted-host genart
+                sudo pip uninstall -y pyhlml
+                sudo pip install pyhlml --index http://${ARTIFACTORY_PYPI_USER}:${ARTIFACTORY_PYPI_PASS}@genart/artifactory/api/pypi/devpypi-local/simple --trusted-host genart
                 echo "-------------------"
                 echo "test execution"
                 echo "-------------------"
-                python3 pyhlml-test.py
+                python pyhlml-test.py
             EOF
         ### END CUSTOM STEP
   podTemplate: {}
