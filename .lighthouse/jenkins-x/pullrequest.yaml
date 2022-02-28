@@ -54,10 +54,6 @@ spec:
           resources: {}
           script: |
             #!/bin/bash
-            echo "SonarQube Password"
-            echo "-------------------------"
-            echo ${SONARQUBE_PASS}
-            echo "-------------------------"
             echo "10.0.199.23 utils-sonarqube" >> /etc/hosts
             echo "code scanning"
             sonar-scanner -Dproject.settings=sonar.properties -Dsonar.login=${SONARQUBE_PASS} -Dsonar.host.url=http://utils-sonarqube
@@ -69,8 +65,25 @@ spec:
             #!/bin/bash
             echo "poetry repo config"
             poetry config repositories.genart http://10.3.162.8/artifactory/api/pypi/devpypi
-            echo "poetry build"
-            poetry build
+            echo "poetry build & publish"
+            poetry publish -r genart --username ${ARTIFACTORY_PYPI_USER} --password ${ARTIFACTORY_PYPI_PASS} --build
+        - name: pyhlml-test-step
+          volumeMounts:
+            - name: ssh-key
+              readOnly: true
+              mountPath: /root/.ssh
+          image: ubuntu:20.04
+          resources: {}
+          script: |
+            #!/bin/bash
+            apt-get update &> .update.log && apt-get -y install openssh-client rsync git &> .install.log
+            ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@10.0.199.61 /bin/bash << EOF
+                sudo pip3 uninstall -y pyhlml
+                sudo pip3 install pyhlml --index http://${ARTIFACTORY_PYPI_USER}:${ARTIFACTORY_PYPI_PASS}@genart/artifactory/api/pypi/devpypi-local/simple --trusted-host genart
+                echo "-------------------"
+                echo "test execution"
+                echo "-------------------"
+                python3 pyhlml-test.py
         ### END CUSTOM STEP
   podTemplate: {}
   serviceAccountName: tekton-bot

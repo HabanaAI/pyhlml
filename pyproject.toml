@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "pyhlml"
-version = "0.1.0"
-description = "tetsing"
-authors = ["Your Name <you@example.com>"]
+version = "1.0.2"
+description = "Python3 wrapper for the HLML library."
+authors = ["Keegan van Gemeren <kvangemeren@habana.ai>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 setuptools = ">=42"
 wheel = "^0.37.0"
 

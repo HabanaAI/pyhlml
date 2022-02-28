@@ -45,8 +45,6 @@ spec:
         - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
           name: ""
           resources: {}
-        - name: next-version
-          resources: {}
         - name: jx-variables
           resources: {}
         ### BEGIN CUSTOM STEP
@@ -56,10 +54,6 @@ spec:
           resources: {}
           script: |
             #!/bin/bash
-            echo "SonarQube Password"
-            echo "-------------------------"
-            echo ${SONARQUBE_PASS}
-            echo "-------------------------"
             echo "10.0.199.23 utils-sonarqube" >> /etc/hosts
             echo "code scanning"
             sonar-scanner -Dproject.settings=sonar.properties -Dsonar.login=${SONARQUBE_PASS} -Dsonar.host.url=http://utils-sonarqube
@@ -83,13 +77,13 @@ spec:
           script: |
             #!/bin/bash
             apt-get update &> .update.log && apt-get -y install openssh-client rsync git &> .install.log
-            ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@10.0.199.67 /bin/bash << EOF
-                sudo pip uninstall -y pyhlml
-                sudo pip install pyhlml --index http://${ARTIFACTORY_PYPI_USER}:${ARTIFACTORY_PYPI_PASS}@genart/artifactory/api/pypi/devpypi-local/simple --trusted-host genart
+            ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@10.0.199.61 /bin/bash << EOF
+                sudo pip3 uninstall -y pyhlml
+                sudo pip3 install pyhlml --index http://${ARTIFACTORY_PYPI_USER}:${ARTIFACTORY_PYPI_PASS}@genart/artifactory/api/pypi/devpypi-local/simple --trusted-host genart
                 echo "-------------------"
                 echo "test execution"
                 echo "-------------------"
-                python pyhlml-test.py
+                python3 pyhlml-test.py
             EOF
         ### END CUSTOM STEP
   podTemplate: {}
