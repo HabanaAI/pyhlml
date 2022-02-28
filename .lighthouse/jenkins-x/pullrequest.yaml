@@ -69,7 +69,7 @@ spec:
             apt-get update &> .update.log && apt-get -y install openssh-client rsync git &> .install.log
             ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@10.0.199.61 /bin/bash << EOF
                 sudo pip3 uninstall -y pyhlml
-                sudo pip3 install -e git+https://github.com/HabanaAI/pyhlml.git#egg=pyhlml
+                sudo pip3 install -e git+https://github.com/HabanaAI/pyhlml.git#egg=pyhlml@python38-support-patch
                 echo "-------------------"
                 echo "test execution"
                 echo "-------------------"
