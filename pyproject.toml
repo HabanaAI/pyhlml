@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "pyhlml"
-version = "1.0.4"
+version = "1.0.2"
 description = "pyhlml"
-authors = ["Your Name <you@example.com>"]
+authors = ["Keegan van Gemeren <kvangemeren@habana.ai>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
