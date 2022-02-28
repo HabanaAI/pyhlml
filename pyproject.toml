@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "pyhlml"
 version = "1.0.2"
-description = "pyhlml"
+description = "Python3 wrapper for the HLML library."
 authors = ["Keegan van Gemeren <kvangemeren@habana.ai>"]
 
 [tool.poetry.dependencies]
