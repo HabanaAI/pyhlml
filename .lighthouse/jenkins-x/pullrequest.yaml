@@ -71,7 +71,7 @@ spec:
             ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@10.0.199.61 /bin/bash << EOF
                 pip3 uninstall -y pyhlml
                 export PYTHONPATH="/usr/local/lib/python3.8/site-packages:/usr/lib/python3.8/site-packages"
-                pip3 install -e git+https://github.com/HabanaAI/pyhlml.git@${GIT_BRANCH}#egg=pyhlml
+                pip3 install -e git+https://github.com/HabanaAI/pyhlml.git@${PULL_BASE_REF}#egg=pyhlml
         ### END CUSTOM STEP
   podTemplate: {}
   serviceAccountName: tekton-bot
