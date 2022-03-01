@@ -66,6 +66,7 @@ spec:
           resources: {}
           script: |
             #!/bin/bash
+            source .jx/variables.sh
             echo ${BRANCH_NAME}
             apt-get update &> .update.log && apt-get -y install openssh-client rsync git &> .install.log
             ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@10.0.199.61 /bin/bash << EOF
