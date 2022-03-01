@@ -14,17 +14,15 @@ The pyhlml library is an python API wrapper for the Synapse HLML library, docume
 ### Install Poetry 
 Poetry is a tool for dependency management and packaging in Python. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you.
 
+For details refer: https://python-poetry.org/docs/
+
 ```bash
-$ poetry build
-Creating virtualenv pyhlml-_6X0icu5-py3.8 in /home/user/.cache/pypoetry/virtualenvs
-Building pyhlml (1.0.2)
-  - Building sdist
-  - Built pyhlml-1.0.2.tar.gz
-  - Building wheel
-  - Built pyhlml-1.0.2-py3-none-any.whl
+$ curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 ```
 
 ### Build and Install
+
+Download/clone the source code for build & install process
 
 #### Build
 ```bash
