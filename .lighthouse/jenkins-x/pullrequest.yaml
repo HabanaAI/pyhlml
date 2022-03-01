@@ -66,11 +66,12 @@ spec:
           resources: {}
           script: |
             #!/bin/bash
+            echo ${BRANCH_NAME}
             apt-get update &> .update.log && apt-get -y install openssh-client rsync git &> .install.log
             ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ubuntu@10.0.199.61 /bin/bash << EOF
                 pip3 uninstall -y pyhlml
                 export PYTHONPATH="/usr/local/lib/python3.8/site-packages:/usr/lib/python3.8/site-packages"
-                pip3 install -e git+https://github.com/HabanaAI/pyhlml.git@python38-support-patch#egg=pyhlml
+                pip3 install -e git+https://github.com/HabanaAI/pyhlml.git@${BRANCH_NAME}#egg=pyhlml
         ### END CUSTOM STEP
   podTemplate: {}
   serviceAccountName: tekton-bot
