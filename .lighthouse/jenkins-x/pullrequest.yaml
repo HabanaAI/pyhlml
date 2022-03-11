@@ -92,7 +92,7 @@ spec:
                   print(f"Device {i} Utilization: {pyhlml.hlmlDeviceGetUtilizationRates(device)}")
                 # Shutdown
                 pyhlml.hlmlShutdown()
-                EOL
+            EOL
                 cat pyhlml-test-new.py
                 echo "-------------------"
                 echo "test execution"
