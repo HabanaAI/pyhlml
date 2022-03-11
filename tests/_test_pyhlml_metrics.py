@@ -18,7 +18,5 @@ class TestPyHLML_Metrics(unittest.TestCase):
     def tearDown(self):
         pyhlml.hlmlShutdown()
 
-    def 
-
 if __name__ == "__main__":
     unittest.main()
