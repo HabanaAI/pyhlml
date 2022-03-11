@@ -278,6 +278,38 @@ def hlmlDeviceGetTemperatureThreshold(device: hlml_t.HLML_DEVICE.TYPE, threshold
     check_return(ret)
     return temp.value
 
+def hlmlDeviceGetPersistenceMode(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.HLML_ENABLE_STATE:
+    """ Retrieves the persistence mode of the device 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            mode (int) - The persistence mode of the device.
+    """
+    global _hlmlOBJ
+    mode = ctypes.c_uint()
+
+    fn = _hlmlOBJ.get_func_ptr("hlml_device_get_persistence_mode")
+    ret = fn(device, ctypes.byref(mode))
+
+    check_return(ret)
+    return mode.value
+
+def hlmlDeviceGetPerformanceState(device: hlml_t.HLML_DEVICE.TYPE) -> hlml_t.HLML_P_STATES:
+    """ Retrieves the performance state of the device 
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+        Returns:
+            p_state (int) - The performance state of the device.
+    """
+    global _hlmlOBJ
+    p_state = ctypes.c_uint()
+
+    fn = _hlmlOBJ.get_func_ptr("hlml_device_get_performance_state")
+    ret = fn(device, ctypes.byref(p_state))
+
+    check_return(ret)
+    return p_state.value
+
 def hlmlDeviceGetPowerUsage(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     """ Retrieves power usage for the device in mW 
         Parameters:
@@ -332,9 +364,9 @@ def hlmlDeviceGetECCMode(device: hlml_t.HLML_DEVICE.TYPE) -> dict:
     return out
 
 def hlmlDeviceGetTotalECCErrors(
-    device: hlml_t.HLML_DEVICE.TYPE, error_type: hlml_t.HLML_MEMORY_ERROR.TYPE, 
-    counter_type: hlml_t.HLML_ECC_COUNTER
-    ) -> int:
+    device: hlml_t.HLML_DEVICE.TYPE,
+    error_type: hlml_t.HLML_MEMORY_ERROR.TYPE, 
+    counter_type: hlml_t.HLML_ECC_COUNTER) -> int:
     """ Returns the number of ECC errors for a device. Number is from the last reset, or driver
         reinstall. Currently only the number of corrected errors is supported.
         Parameters:
@@ -349,6 +381,30 @@ def hlmlDeviceGetTotalECCErrors(
 
     fn = _hlmlOBJ.get_func_ptr("hlml_device_get_total_ecc_errors")
     ret = fn(device, error_type, counter_type, ctypes.byref(count))
+
+    check_return(ret)
+    return count.value
+
+def hlmlDeviceGetMemoryErrorCounter(
+    device: hlml_t.HLML_DEVICE.TYPE,
+    error_type: hlml_t.HLML_MEMORY_ERROR.TYPE,
+    location: hlml_t.HLML_MEMORY_LOCATION.TYPE) -> int:
+    """ Returns the number of ECC errors for a device at a specified memory location.
+        Number is from the last reset, or driver reinstall. Currently only the number
+        of corrected errors is supported.
+        Parameters:
+            device (HLML_DEVICE.TYPE) - The handle for a habana device.
+            error_type ( 0-CORRECTED / 1-UNCORRECTED ) - The type of errors to count.
+            counter_type ( 0-VOLATILE / 1-AGGREGATE ) - The type of counter to use.
+            location ( 0-SRAM / 1-DRAM ) - The type of memory.
+        Returns:
+            count (int) - The number of ECC errors for the device, specified by parameters.
+    """
+    global _hlmlOBJ
+    count = ctypes.c_longlong()
+
+    fn = _hlmlOBJ.get_func_ptr("hlml_device_get_memory_error_counter")
+    ret = fn(device, error_type, counter_type, location, ctypes.byref(count))
 
     check_return(ret)
     return count.value

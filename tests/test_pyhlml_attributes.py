@@ -62,6 +62,8 @@ class TestPyHLML_Attributes(unittest.TestCase):
                 "PCB_ASSEMBLY_VER": self.pcb_info.pcb_assembly_ver
             },
             "HL REV": self.hl_rev,
+            "PERSISTENCE_Mode": self.persistence_mode,
+            "PERFORMANCE_State": self.p_state,
             "BRD ID": self.brd_id
         }
         print("")
@@ -137,6 +139,14 @@ class TestPyHLML_Attributes(unittest.TestCase):
     def get_brd_id(self):
         self.brd_id = pyhlml.hlmlDeviceGetBoardID(self.device)
         self.assertIsNotNone(self.brd_id)
+
+    def get_persistence_mode(self):
+        self.persistence_mode = pyhlml.hlmlDeviceGetPersistenceMode(self.device)
+        self.assertIsNotNone(self.persistence_mode)
+
+    def get_performance_state(self):
+        self.p_state = pyhlml.hlmlDeviceGetPerformanceState(self.device)
+        self.assertIsNotNone(self.p_state)
 
 if __name__ == "__main__":
     unittest.main()

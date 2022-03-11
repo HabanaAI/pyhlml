@@ -42,6 +42,16 @@ class TestPyHLML_Metrics(unittest.TestCase):
                 "Volatile": self.err_corr_vol,
                 "Aggregate": self.err_corr_agg
             },
+            "Memory Errors": {
+                "SRAM": {
+                    #"Volatile": self.err_corr_vol_sram,
+                    #"Aggregate": self.err_corr_agg_sram
+                },
+                "DRAM": {
+                    #"Volatile": self.err_corr_vol_dram,
+                    #"Aggregate": self.err_corr_agg_dram,
+                }
+            },
             "PCIE Throughput": {
                 "TX": self.pci_tx,
                 "RX": self.pci_rx
@@ -49,7 +59,7 @@ class TestPyHLML_Metrics(unittest.TestCase):
             "PCIE Replays": self.pcie_replay,
             #"PCIE_LINK_GEN": self.pcie_link_gen,
             "PCIE_LINK_WIDTH": self.pcie_link_width,
-            "Throttle Reasons": self.throttle_reason,
+            #"Throttle Reasons": self.throttle_reason,
             "Power Consumption": self.consumption
         }
         print("")
@@ -84,8 +94,18 @@ class TestPyHLML_Metrics(unittest.TestCase):
     def get_total_ecc_errors(self):
         self.err_corr_vol = pyhlml.hlmlDeviceGetTotalECCErrors(self.device, 0, 0)
         self.err_corr_agg = pyhlml.hlmlDeviceGetTotalECCErrors(self.device, 0, 1)
+        self.assertIsNotNone(self.err_corr_vol)
         self.assertIsNotNone(self.err_corr_agg)
-        self.assertIsNotNone(self.err_corr_agg)
+
+    def get_memory_error_counters(self):
+        self.err_corr_vol_sram = pyhlml.hlmlDeviceGetMemoryErrorCounter(self.device, 0, 0, 0)
+        self.err_corr_agg_sram = pyhlml.hlmlDeviceGetMemoryErrorCounter(self.device, 0, 1, 0)
+        self.err_corr_vol_dram = pyhlml.hlmlDeviceGetMemoryErrorCounter(self.device, 0, 0, 1)
+        self.err_corr_agg_dram = pyhlml.hlmlDeviceGetMemoryErrorCounter(self.device, 0, 1, 1)
+        self.assertIsNotNone(self.err_corr_vol_sram)
+        self.assertIsNotNone(self.err_corr_agg_sram)
+        self.assertIsNotNone(self.err_corr_vol_dram)
+        self.assertIsNotNone(self.err_corr_agg_dram)
 
     def get_pcie_throughput(self):
         self.pci_tx = pyhlml.hlmlDeviceGetPCIEThroughput(self.device, 0)

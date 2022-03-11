@@ -73,6 +73,12 @@ class HLML_MEMORY_ERROR:
     HLML_MEMORY_ERROR_TYPE_UNCORRECTED      = 1
     HLML_MEMORY_ERROR_TYPE_COUNT            = 2
 
+class HLML_MEMORY_LOCATION:
+    TYPE                                    = ctypes.c_uint()
+    HLML_MEMORY_LOCATION_SRAM               = 0
+    HLML_MEMORY_LOCATION_DRAM               = 1
+    HLML_MEMORY_LOCATION_COUNT              = 2
+
 class HLML_ECC_COUNTER:
     TYPE                                    = ctypes.c_uint()
     HLML_VOLATILE_ECC                       = 0
