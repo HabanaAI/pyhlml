@@ -40,21 +40,37 @@ class TestPyHLML_Attributes(unittest.TestCase):
                     "link_width": self.pci_info.caps.link_width
                 }
             },
-            "Max Clock": self.max,
-            "Temp Thresholds": {
-                "Shutdown": self.shutdown_tmp_thrsh,
-                "Slowdown": self.slowdown_tmp_thrsh,
-                "Memory": self.mem_tmp_thrsh,
-                "GPU": self.gpu_tmp_thrsh
+            "Violation Status": {
+                "Power": {
+                    "reference_time": self.power.reference_time,
+                    "violation_time": self.power.violation_time
+                },
+                "Thermal": {
+                    "reference_time": self.power.reference_time,
+                    "violation_time": self.power.violation_time
+                },
             },
-            #"Power Management Limit": self.power_default_limit,
+            "Power Management Limit": self.power_default_limit,
             "ECC_Mode": {
                 "Current": self.current_ecc_mode,
                 "Pending": self.pending_ecc_mode
             },
+            "CPU_Affinity": {
+                "cpu[0]": self.cpu_affinity_set[0],
+                "cpu[1]": self.cpu_affinity_set[1],
+                "Node[0]": self.cpu_affinity_set_node[0],
+                "Socket[0]": self.cpu_affinity_set_socket[0]
+            },
+            "Memory_Affinity": {
+                "Node": self.cpu_affinity_set_node[0],
+                "Socket": self.cpu_affinity_set_socket[0]
+            },
             "UUID": self.uuid,
             "Minor": self.minor_number,
-            "MAC Info": self.mac_info,
+            "MAC Info": {
+                "ID": self.mac_info.id,
+                "addr": self.mac_info.addr,
+            },
             "Serial": self.serial,
             "PCB Info": self.pcb_info,
             "PCB Info": {
@@ -147,6 +163,28 @@ class TestPyHLML_Attributes(unittest.TestCase):
     def get_performance_state(self):
         self.p_state = pyhlml.hlmlDeviceGetPerformanceState(self.device)
         self.assertIsNotNone(self.p_state)
+
+    def get_cpu_affinity(self):
+        self.cpu_affinity_set = pyhlml.hlmlDeviceGetCpuAffinity(self.device, 2)
+        self.assertIsNotNone(self.cpu_affinity_set)
+        
+    def get_cpu_affinity_within_scope(self):
+        self.cpu_affinity_set_node = pyhlml.hlmlDeviceGetCpuAffinityWithinScope(self.device, 1, 0)
+        self.cpu_affinity_set_socket = pyhlml.hlmlDeviceGetCpuAffinityWithinScope(self.device, 1, 1)
+        self.assertIsNotNone(self.cpu_affinity_set_node)
+        self.assertIsNotNone(self.cpu_affinity_set_socket)
+
+    def get_memory_affinity(self):
+        self.memory_affinity_set_node = pyhlml.hlmlDeviceGetCpuAffinityWithinScope(self.device, 1, 0)
+        self.memory_affinity_set_socket = pyhlml.hlmlDeviceGetCpuAffinityWithinScope(self.device, 1, 1)
+        self.assertIsNotNone(self.memory_affinity_set_node)
+        self.assertIsNotNone(self.memory_affinity_set_socket)
+
+    def get_violation_status(self):
+        self.power = pyhlml.hlmlDeviceGetViolationStatus(self.device, 0)
+        self.thermal = pyhlml.hlmlDeviceGetViolationStatus(self.device, 1)
+        self.assertIsNotNone(self.power)
+        self.assertIsNotNone(self.thermal)
 
 if __name__ == "__main__":
     unittest.main()

@@ -44,12 +44,12 @@ class TestPyHLML_Metrics(unittest.TestCase):
             },
             "Memory Errors": {
                 "SRAM": {
-                    #"Volatile": self.err_corr_vol_sram,
-                    #"Aggregate": self.err_corr_agg_sram
+                    "Volatile": self.err_corr_vol_sram,
+                    "Aggregate": self.err_corr_agg_sram
                 },
                 "DRAM": {
-                    #"Volatile": self.err_corr_vol_dram,
-                    #"Aggregate": self.err_corr_agg_dram,
+                    "Volatile": self.err_corr_vol_dram,
+                    "Aggregate": self.err_corr_agg_dram,
                 }
             },
             "PCIE Throughput": {
@@ -57,10 +57,15 @@ class TestPyHLML_Metrics(unittest.TestCase):
                 "RX": self.pci_rx
             },
             "PCIE Replays": self.pcie_replay,
-            #"PCIE_LINK_GEN": self.pcie_link_gen,
+            "PCIE_LINK_GEN": self.pcie_link_gen,
             "PCIE_LINK_WIDTH": self.pcie_link_width,
-            #"Throttle Reasons": self.throttle_reason,
-            "Power Consumption": self.consumption
+            "Throttle Reasons": self.throttle_reason,
+            "Power Consumption": self.consumption,
+            "Replaced Rows": {
+                "Pending Status": self.replaced_rows_pending_status,
+                "Replaced Row Count(Single Bit)": self.replaced_row_count_sb,
+                #"Replaced Rows(Single Bit)": self.replaced_rows_sb
+             }
         }
         print("")
         pp.pprint(output)
@@ -133,5 +138,16 @@ class TestPyHLML_Metrics(unittest.TestCase):
         self.consumption = pyhlml.hlmlDeviceGetTotalEnergyConsumption(self.device)
         self.assertIsNotNone(self.consumption)
        
+    def get_replaced_rows(self):
+        self.replaced_row_count_sb = pyhlml.hlmlDeviceGetReplacedRowsCount(self.device,1)
+        self.assertIsNotNone(self.replaced_row_count_sb)
+        if self.replaced_row_count_sb > 0:
+            self.replaced_rows_sb = pyhlml.hlmlDeviceGetReplacedRows(self.device,1,self.replaced_row_count_sb)
+            self.assertIsNotNone(self.replaced_rows_sb)
+
+    def get_replaced_rows_pending_status(self):
+        self.replaced_rows_pending_status = pyhlml.hlmlDeviceGetReplacedRowsPendingStatus(self.device)
+        self.assertIsNotNone(self.replaced_rows_pending_status)
+
 if __name__ == "__main__":
     unittest.main()
