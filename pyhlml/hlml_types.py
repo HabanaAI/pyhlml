@@ -20,6 +20,11 @@ class HLML_DEFINE:
     HLML_CLOCKS_THROTTLE_REASON_POWER       = ( 1 << 0 )
     HLML_CLOCKS_THROTTLE_REASON_THERMAL     = ( 1 << 1 )
 
+class HLML_AFFINITY_SCOPE:
+    TYPE                                    = ctypes.c_uint()
+    HLML_AFFINITY_SCOPE_NODE                = 0
+    HLML_AFFINITY_SCOPE_SOCKET              = 1
+
 class HLML_RETURN:
     TYPE                                    = ctypes.c_uint()
     HLML_SUCCESS                            = 0
@@ -73,6 +78,12 @@ class HLML_MEMORY_ERROR:
     HLML_MEMORY_ERROR_TYPE_UNCORRECTED      = 1
     HLML_MEMORY_ERROR_TYPE_COUNT            = 2
 
+class HLML_MEMORY_LOCATION:
+    TYPE                                    = ctypes.c_uint()
+    HLML_MEMORY_LOCATION_SRAM               = 0
+    HLML_MEMORY_LOCATION_DRAM               = 1
+    HLML_MEMORY_LOCATION_COUNT              = 2
+
 class HLML_ECC_COUNTER:
     TYPE                                    = ctypes.c_uint()
     HLML_VOLATILE_ECC                       = 0
@@ -96,6 +107,18 @@ class HLML_PCIE_UTIL_COUNTER:
     
 class HLML_EVENT_SET:
     TYPE                                    = ctypes.c_void_p()
+
+class HLML_ROW_REPLACEMENT_CAUSE:
+    TYPE                                                      = ctypes.c_uint()
+    HLML_ROW_REPLACEMENT_CAUSE_MULTIPLE_SINGLE_BIT_ECC_ERRORS = 0,
+    HLML_ROW_REPLACEMENT_CAUSE_DOUBLE_BIT_ECC_ERROR           = 1,
+    HLML_ROW_REPLACEMENT_CAUSE_COUNT                          = 2
+
+class HLML_PERF_POLICY:
+    TYPE                                    = ctypes.c_uint()
+    HLML_PERF_POLICY_POWER                  = 0,
+    HLML_PERF_POLICY_THERMAL                = 0,
+    HLML_PERF_POLICY_COUNT                  = 0
 
 class _struct_c_hlml_unit(ctypes.Structure):
     pass # opaque handle
@@ -186,6 +209,19 @@ class c_hlml_event_data(_PrintS):
 class c_hlml_mac_info(_PrintS):
     _fields_ = [("addr", ctypes.c_ubyte * HLML_DEFINE.ETHER_ADDR_LEN), # unsigned char
                 ("id", ctypes.c_int)
+               ]
+
+class c_hlml_violation_time(_PrintS):
+    _fields_ = [("reference_time", ctypes.c_ulonglong),
+                ("violation_time", ctypes.c_ulonglong)
+               ]
+
+class c_hlml_row_address(_PrintS):
+    _fields_ = [("hbm_idx", ctypes.c_uint8),
+                ("pc", ctypes.c_uint8),
+                ("sid", ctypes.c_uint8),
+                ("bank_idx", ctypes.c_uint8),
+                ("row_addr", ctypes.c_uint16)
                ]
 
 class hlml_ecc_mode(_PrintS):
