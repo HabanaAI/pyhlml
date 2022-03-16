@@ -13,6 +13,7 @@ class HLML_DEFINE:
     PCI_LINK_INFO_LEN                       = 10
     ETHER_ADDR_LEN                          = 6 
     HL_FIELD_MAX_SIZE                       = 32
+    HLML_DEVICE_ROW_RPL_MAX                 = 32
     HLML_DEVICE_MAC_MAX_ADDRESSES           = 20
     HLML_EVENT_ECC_ERR                      = ( 1 << 0 )
     HLML_EVENT_CRITICAL_ERR                 = ( 1 << 1 )

@@ -825,19 +825,18 @@ def hlmlDeviceGetReplacedRows(device: hlml_t.HLML_DEVICE.TYPE, cause: hlml_t.HLM
             device (HLML_DEVICE.TYPE) - The handle for a habana device.
             cause  (HLML_ROW_REPLACEMENT_CAUSE.TYPE) - The replacement cause to query.
         Returns:
-            replaced_rows - row set.
+            addresses - An array of hlml_t.c_hlml_row_address structures.
     """
     global _hlmlOBJ
 
     c_row_count = ctypes.c_uint(row_count)
-
-    replaced_rows = (c_hlml_row_address * row_count)()
+    addresses = (hlml_t.c_hlml_row_address * row_count)()
 
     fn = _hlmlOBJ.get_func_ptr("hlml_device_get_replaced_rows")
-    ret = fn(device, cause, ctypes.byref(c_row_count), ctypes.byref(replaced_rows))
+    ret = fn(device, cause, ctypes.byref(c_row_count), ctypes.byref(addresses))
 
     check_return(ret)
-    return replaced_rows
+    return addresses
 
 def hlmlDeviceGetReplacedRowsPendingStatus(device: hlml_t.HLML_DEVICE.TYPE) -> int:
     """ Returns the pending status of replaced rows.
