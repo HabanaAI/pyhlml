@@ -64,7 +64,7 @@ class TestPyHLML_Metrics(unittest.TestCase):
             "Replaced Rows": {
                 "Pending Status": self.replaced_rows_pending_status,
                 "Replaced Row Count(Single Bit)": self.replaced_row_count_sb,
-                #"Replaced Rows(Single Bit)": self.replaced_rows_sb
+                "Replaced Row Count(Double Bit)": self.replaced_row_count_db
              }
         }
         print("")
@@ -139,11 +139,10 @@ class TestPyHLML_Metrics(unittest.TestCase):
         self.assertIsNotNone(self.consumption)
        
     def get_replaced_rows(self):
-        self.replaced_row_count_sb = pyhlml.hlmlDeviceGetReplacedRowsCount(self.device,1)
-        self.assertIsNotNone(self.replaced_row_count_sb)
-        if self.replaced_row_count_sb > 0:
-            self.replaced_rows_sb = pyhlml.hlmlDeviceGetReplacedRows(self.device,1,self.replaced_row_count_sb)
-            self.assertIsNotNone(self.replaced_rows_sb)
+        self.replaced_row_count_sb = pyhlml.hlmlDeviceGetReplacedRowsCount(self.device,0)
+        self.replaced_rows_sb = pyhlml.hlmlDeviceGetReplacedRows(self.device,self.replaced_row_count_sb,0)
+        self.replaced_row_count_db = pyhlml.hlmlDeviceGetReplacedRowsCount(self.device,1)
+        self.replaced_rows_db = pyhlml.hlmlDeviceGetReplacedRows(self.device,self.replaced_row_count_sb,1)
 
     def get_replaced_rows_pending_status(self):
         self.replaced_rows_pending_status = pyhlml.hlmlDeviceGetReplacedRowsPendingStatus(self.device)
